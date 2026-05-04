@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 运动会后台管理系统
 
-## Getting Started
+运动会比赛成绩管理、赛务调度、数据导入导出的后台管理系统。
 
-First, run the development server:
+## 技术栈
+
+- **Next.js 16** (App Router + 静态导出)
+- **TypeScript**
+- **Tailwind CSS 4**
+- **Lucide React** (图标)
+
+## 本地开发
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+浏览器打开 [http://localhost:3000](http://localhost:3000)。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 编译部署
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+项目配置为静态导出模式，编译后生成 `out/` 目录。
 
-## Learn More
+```bash
+npm run build   # 编译到 out/
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Nginx 部署
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`nginx.conf` 包含完整的 Nginx 配置（Gzip、缓存策略、SPA fallback）。使用 `deploy.sh` 一键部署到云服务器：
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+./deploy.sh <服务器IP> [ssh用户名]
+```
 
-## Deploy on Vercel
+部署目标路径为 `/var/www/frontend`。
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 功能模块
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| 模块 | 页面 | 说明 |
+|------|------|------|
+| 概览 | 首页 | 赛况总览仪表盘 |
+| 赛务 | 比赛进度、成绩录入、成绩公示、轮次成绩 | 核心赛务流程 |
+| 数据 | 导入中心、导出中心、通知中心 | 数据流转 |
+| 管理 | 运动员管理、队伍管理、单位管理 | 基础数据管理 |
+| 系统 | 规则配置、清理数据、系统状态 | 系统配置与维护 |
+
+## 目录结构
+
+```
+src/
+├── app/          # 页面路由
+├── components/   # UI 组件
+│   ├── app-shell.tsx
+│   ├── pages/    # 页面级组件
+│   └── ui/       # 通用 UI 组件
+└── lib/          # 工具函数、API 封装、导航配置
+```

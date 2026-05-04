@@ -1,0 +1,3206 @@
+{
+  "components": {
+    "schemas": {
+      "Athlete": {
+        "properties": {
+          "age_group": {
+            "description": "\u7ec4\u522b",
+            "type": "string"
+          },
+          "athlete_no": {
+            "description": "\u8fd0\u52a8\u5458\u53f7",
+            "type": "string"
+          },
+          "athlete_ref_id": {
+            "description": "\u8fd0\u52a8\u5458\u6570\u636e\u5e93 ID",
+            "type": "integer"
+          },
+          "athlete_type": {
+            "description": "\u8fd0\u52a8\u5458\u7c7b\u578b\uff1acompetitive/fun",
+            "type": "string"
+          },
+          "department_name": {
+            "description": "\u5f52\u5c5e\u5355\u4f4d",
+            "type": "string"
+          },
+          "gender": {
+            "description": "\u6027\u522b\uff1amale/female",
+            "type": "string"
+          },
+          "name": {
+            "description": "\u59d3\u540d",
+            "type": "string"
+          },
+          "registered_events": {
+            "description": "\u5df2\u62a5\u540d\u9879\u76ee\u5217\u8868",
+            "type": "string"
+          },
+          "registration_count": {
+            "description": "\u5df2\u62a5\u540d\u9879\u76ee\u6570",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "BatchAddTeamsRequest": {
+        "properties": {
+          "department_names": {
+            "description": "\u90e8\u95e8\u540d\u79f0\u5217\u8868",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "event_id": {
+            "description": "\u9879\u76ee ID",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "event_id",
+          "department_names"
+        ],
+        "type": "object"
+      },
+      "CheckItem": {
+        "properties": {
+          "detail": {
+            "description": "\u8be6\u60c5\u63cf\u8ff0",
+            "type": "string"
+          },
+          "key": {
+            "description": "\u68c0\u67e5\u9879\u6807\u8bc6",
+            "type": "string"
+          },
+          "label": {
+            "description": "\u68c0\u67e5\u9879\u540d\u79f0",
+            "type": "string"
+          },
+          "ok": {
+            "description": "\u662f\u5426\u901a\u8fc7",
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "ClearDataRequest": {
+        "properties": {
+          "acknowledged": {
+            "description": "\u662f\u5426\u5df2\u786e\u8ba4\u98ce\u9669",
+            "type": "boolean"
+          },
+          "confirm_code": {
+            "description": "\u786e\u8ba4\u7801\uff0c\u683c\u5f0f\u4e3a CLEAR-{n}",
+            "type": "string"
+          },
+          "confirm_text": {
+            "description": "\u786e\u8ba4\u6587\u672c\uff0c\u5fc5\u987b\u4e3a DELETE",
+            "type": "string"
+          },
+          "tables": {
+            "description": "\u8981\u6e05\u7a7a\u7684\u6570\u636e\u8868\u6807\u8bc6",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "tables",
+          "confirm_text",
+          "confirm_code",
+          "acknowledged"
+        ],
+        "type": "object"
+      },
+      "CreateAthleteRequest": {
+        "properties": {
+          "age_group": {
+            "description": "\u5e74\u9f84\u7ec4\uff0c\u53ef\u4e3a\u7a7a",
+            "type": "string"
+          },
+          "athlete_no": {
+            "description": "\u8fd0\u52a8\u5458\u53f7",
+            "type": "string"
+          },
+          "athlete_type": {
+            "description": "\u8fd0\u52a8\u5458\u7c7b\u578b\uff1acompetitive/fun",
+            "type": "string"
+          },
+          "department_name": {
+            "description": "\u5f52\u5c5e\u5355\u4f4d",
+            "type": "string"
+          },
+          "gender": {
+            "description": "\u6027\u522b\uff1amale/female",
+            "type": "string"
+          },
+          "name": {
+            "description": "\u59d3\u540d",
+            "type": "string"
+          }
+        },
+        "required": [
+          "athlete_type",
+          "athlete_no",
+          "name",
+          "gender",
+          "department_name"
+        ],
+        "type": "object"
+      },
+      "CreateResultRequest": {
+        "properties": {
+          "athlete_id": {
+            "description": "\u8fd0\u52a8\u5458\u6570\u636e\u5e93 ID",
+            "type": "integer"
+          },
+          "athlete_no": {
+            "description": "\u8fd0\u52a8\u5458\u53f7\uff08\u53ef\u66ff\u4ee3 athlete_id\uff09",
+            "type": "string"
+          },
+          "athlete_type": {
+            "description": "\u8fd0\u52a8\u5458\u7c7b\u578b\uff1acompetitive/fun",
+            "type": "string"
+          },
+          "entered_by": {
+            "description": "\u5f55\u5165\u4eba\u5458\u59d3\u540d\u6216\u7f16\u53f7",
+            "type": "string"
+          },
+          "event_id": {
+            "description": "\u9879\u76ee ID",
+            "type": "integer"
+          },
+          "performance": {
+            "description": "\u6210\u7ee9\u6587\u672c",
+            "type": "string"
+          },
+          "rank": {
+            "description": "\u540d\u6b21\uff0c\u4e0d\u4f20\u5219\u81ea\u52a8\u63a8\u5b9a",
+            "type": "integer"
+          },
+          "team_id": {
+            "description": "\u961f\u4f0d ID\uff08\u56e2\u4f53\u9879\u76ee\u7528\uff09",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "event_id"
+        ],
+        "type": "object"
+      },
+      "CreateTeamRequest": {
+        "properties": {
+          "department_name": {
+            "description": "\u90e8\u95e8\u540d\u79f0",
+            "type": "string"
+          },
+          "event_id": {
+            "description": "\u9879\u76ee ID",
+            "type": "integer"
+          },
+          "team_name": {
+            "description": "\u961f\u4f0d\u540d\u79f0",
+            "type": "string"
+          }
+        },
+        "required": [
+          "department_name",
+          "event_id",
+          "team_name"
+        ],
+        "type": "object"
+      },
+      "DeleteAthleteRequest": {
+        "properties": {
+          "athlete_no": {
+            "description": "\u8fd0\u52a8\u5458\u53f7",
+            "type": "string"
+          },
+          "athlete_type": {
+            "description": "\u8fd0\u52a8\u5458\u7c7b\u578b\uff1acompetitive/fun",
+            "type": "string"
+          }
+        },
+        "required": [
+          "athlete_type",
+          "athlete_no"
+        ],
+        "type": "object"
+      },
+      "DeleteTeamRequest": {
+        "properties": {
+          "team_id": {
+            "description": "\u961f\u4f0d ID",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "team_id"
+        ],
+        "type": "object"
+      },
+      "ErrorResponse": {
+        "properties": {
+          "error": {
+            "example": "\u53c2\u6570\u9519\u8bef",
+            "type": "string"
+          },
+          "ok": {
+            "example": false,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ok",
+          "error"
+        ],
+        "type": "object"
+      },
+      "Event": {
+        "properties": {
+          "age_group": {
+            "description": "\u7ec4\u522b",
+            "type": "string"
+          },
+          "category": {
+            "description": "\u9879\u76ee\u7c7b\u522b\uff1acompetitive/fun",
+            "type": "string"
+          },
+          "event_type": {
+            "description": "\u9879\u76ee\u7c7b\u578b\uff1atrack/field/fun",
+            "type": "string"
+          },
+          "gender": {
+            "description": "\u6027\u522b\u9650\u5236\uff1amale/female/mixed",
+            "type": "string"
+          },
+          "id": {
+            "description": "\u9879\u76ee ID",
+            "type": "integer"
+          },
+          "is_individual": {
+            "description": "\u662f\u5426\u4e2a\u4eba\u9879\u76ee\uff1a1=\u4e2a\u4eba 0=\u56e2\u4f53",
+            "type": "integer"
+          },
+          "name": {
+            "description": "\u9879\u76ee\u540d\u79f0",
+            "type": "string"
+          },
+          "scoring_strategy": {
+            "description": "\u8ba1\u5206\u7b56\u7565\uff1atime/length/count/count_miss",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "EventProgress": {
+        "properties": {
+          "age_group": {
+            "description": "\u7ec4\u522b",
+            "type": "string"
+          },
+          "category": {
+            "description": "\u9879\u76ee\u7c7b\u522b",
+            "type": "string"
+          },
+          "event_type": {
+            "description": "\u9879\u76ee\u7c7b\u578b",
+            "type": "string"
+          },
+          "gender": {
+            "description": "\u6027\u522b",
+            "type": "string"
+          },
+          "id": {
+            "description": "\u9879\u76ee ID",
+            "type": "integer"
+          },
+          "is_individual": {
+            "description": "\u662f\u5426\u4e2a\u4eba\u9879\u76ee",
+            "type": "integer"
+          },
+          "name": {
+            "description": "\u9879\u76ee\u540d\u79f0",
+            "type": "string"
+          },
+          "print_done": {
+            "description": "\u516c\u793a\u6253\u5370\u662f\u5426\u5b8c\u6210\uff1a0/1",
+            "type": "integer"
+          },
+          "record_done": {
+            "description": "\u6210\u7ee9\u5f55\u5165\u662f\u5426\u5b8c\u6210\uff1a0/1",
+            "type": "integer"
+          },
+          "scoring_strategy": {
+            "description": "\u8ba1\u5206\u7b56\u7565",
+            "type": "string"
+          },
+          "updated_at": {
+            "description": "\u66f4\u65b0\u65f6\u95f4",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "InitStatus": {
+        "properties": {
+          "checks": {
+            "description": "\u5404\u9879\u68c0\u67e5\u7ed3\u679c",
+            "items": {
+              "$ref": "#/components/schemas/CheckItem"
+            },
+            "type": "array"
+          },
+          "completed": {
+            "description": "\u521d\u59cb\u5316\u662f\u5426\u5b8c\u6210",
+            "type": "boolean"
+          },
+          "ok": {
+            "description": "\u8bf7\u6c42\u662f\u5426\u6210\u529f",
+            "type": "boolean"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/Summary"
+          }
+        },
+        "type": "object"
+      },
+      "OkResponse": {
+        "additionalProperties": true,
+        "properties": {
+          "ok": {
+            "example": true,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ok"
+        ],
+        "type": "object"
+      },
+      "Registration": {
+        "properties": {
+          "age_group": {
+            "description": "\u7ec4\u522b",
+            "type": "string"
+          },
+          "gender": {
+            "description": "\u6027\u522b",
+            "type": "string"
+          },
+          "id": {
+            "description": "\u9879\u76ee ID",
+            "type": "integer"
+          },
+          "label": {
+            "description": "\u9879\u76ee\u5b8c\u6574\u663e\u793a\u540d",
+            "type": "string"
+          },
+          "name": {
+            "description": "\u9879\u76ee\u540d\u79f0",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "RegistrationRequest": {
+        "properties": {
+          "athlete_no": {
+            "description": "\u8fd0\u52a8\u5458\u53f7",
+            "type": "string"
+          },
+          "athlete_type": {
+            "description": "\u8fd0\u52a8\u5458\u7c7b\u578b\uff1acompetitive/fun",
+            "type": "string"
+          },
+          "event_id": {
+            "description": "\u9879\u76ee ID",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "athlete_type",
+          "athlete_no",
+          "event_id"
+        ],
+        "type": "object"
+      },
+      "ReportEnvironmentRequest": {
+        "properties": {
+          "air_quality": {
+            "description": "\u7a7a\u6c14\u8d28\u91cf",
+            "type": "string"
+          },
+          "date": {
+            "description": "\u65e5\u671f",
+            "type": "string"
+          },
+          "temperature_high": {
+            "description": "\u6700\u9ad8\u6e29",
+            "type": "string"
+          },
+          "temperature_low": {
+            "description": "\u6700\u4f4e\u6e29",
+            "type": "string"
+          },
+          "weather": {
+            "description": "\u5929\u6c14",
+            "type": "string"
+          },
+          "wind_direction": {
+            "description": "\u98ce\u5411",
+            "type": "string"
+          },
+          "wind_speed": {
+            "description": "\u98ce\u901f",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Result": {
+        "properties": {
+          "age_group": {
+            "description": "\u7ec4\u522b",
+            "type": "string"
+          },
+          "athlete_type": {
+            "description": "\u8fd0\u52a8\u5458\u7c7b\u578b",
+            "type": "string"
+          },
+          "category": {
+            "description": "\u9879\u76ee\u7c7b\u522b",
+            "type": "string"
+          },
+          "created_at": {
+            "description": "\u521b\u5efa\u65f6\u95f4",
+            "type": "string"
+          },
+          "department_name": {
+            "description": "\u5f52\u5c5e\u5355\u4f4d",
+            "type": "string"
+          },
+          "entered_by": {
+            "description": "\u5f55\u5165\u4eba\u5458",
+            "type": "string"
+          },
+          "event_name": {
+            "description": "\u9879\u76ee\u540d\u79f0",
+            "type": "string"
+          },
+          "id": {
+            "description": "\u6210\u7ee9 ID",
+            "type": "integer"
+          },
+          "performance": {
+            "description": "\u6210\u7ee9\u6587\u672c",
+            "type": "string"
+          },
+          "points": {
+            "description": "\u79ef\u5206",
+            "type": "integer"
+          },
+          "rank": {
+            "description": "\u540d\u6b21",
+            "type": "integer"
+          },
+          "result_type": {
+            "description": "\u6210\u7ee9\u7c7b\u578b\uff1aathlete/team",
+            "type": "string"
+          },
+          "scoring_strategy": {
+            "description": "\u8ba1\u5206\u7b56\u7565",
+            "type": "string"
+          },
+          "target_name": {
+            "description": "\u8fd0\u52a8\u5458\u540d\u6216\u961f\u4f0d\u540d",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "RuleConfig": {
+        "properties": {
+          "age_group_options": {
+            "description": "\u7ec4\u522b\u914d\u7f6e",
+            "type": "object"
+          },
+          "attempt_policy": {
+            "description": "\u591a\u6b21\u5c1d\u8bd5\u7b56\u7565\uff1abest/latest",
+            "type": "string"
+          },
+          "event_scoring_strategy": {
+            "description": "\u9879\u76ee\u8ba1\u5206\u7b56\u7565\u6620\u5c04",
+            "type": "object"
+          },
+          "point_rule": {
+            "description": "\u540d\u6b21\u79ef\u5206\u89c4\u5219",
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "RuleConfigResponse": {
+        "properties": {
+          "config": {
+            "$ref": "#/components/schemas/RuleConfig"
+          },
+          "ok": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "RuleSaveRequest": {
+        "properties": {
+          "config": {
+            "additionalProperties": true,
+            "description": "\u5b8c\u6574\u89c4\u5219\u914d\u7f6e\u5bf9\u8c61",
+            "type": "object"
+          }
+        },
+        "required": [
+          "config"
+        ],
+        "type": "object"
+      },
+      "SetMeetDateRequest": {
+        "properties": {
+          "meet_date": {
+            "description": "\u6bd4\u8d5b\u65e5\u671f\uff0c\u683c\u5f0f YYYY-MM-DD",
+            "format": "date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "meet_date"
+        ],
+        "type": "object"
+      },
+      "Summary": {
+        "properties": {
+          "athlete_count": {
+            "description": "\u8fd0\u52a8\u5458\u603b\u6570",
+            "type": "integer"
+          },
+          "department_count": {
+            "description": "\u90e8\u95e8\u603b\u6570",
+            "type": "integer"
+          },
+          "event_count": {
+            "description": "\u9879\u76ee\u603b\u6570",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "Team": {
+        "properties": {
+          "age_group": {
+            "description": "\u9879\u76ee\u7ec4\u522b",
+            "type": "string"
+          },
+          "department_name": {
+            "description": "\u5f52\u5c5e\u5355\u4f4d",
+            "type": "string"
+          },
+          "event_id": {
+            "description": "\u6240\u5c5e\u9879\u76ee ID",
+            "type": "integer"
+          },
+          "event_name": {
+            "description": "\u6240\u5c5e\u9879\u76ee\u540d\u79f0",
+            "type": "string"
+          },
+          "gender": {
+            "description": "\u9879\u76ee\u6027\u522b",
+            "type": "string"
+          },
+          "id": {
+            "description": "\u961f\u4f0d ID",
+            "type": "integer"
+          },
+          "member_count": {
+            "description": "\u6210\u5458\u6570",
+            "type": "integer"
+          },
+          "members_summary": {
+            "description": "\u6210\u5458\u59d3\u540d\u6458\u8981",
+            "type": "string"
+          },
+          "team_name": {
+            "description": "\u961f\u4f0d\u540d\u79f0",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TeamMember": {
+        "properties": {
+          "athlete_no": {
+            "description": "\u8fd0\u52a8\u5458\u53f7",
+            "type": "string"
+          },
+          "athlete_ref_id": {
+            "description": "\u8fd0\u52a8\u5458\u6570\u636e\u5e93 ID",
+            "type": "integer"
+          },
+          "athlete_type": {
+            "description": "\u8fd0\u52a8\u5458\u7c7b\u578b",
+            "type": "string"
+          },
+          "department_name": {
+            "description": "\u5f52\u5c5e\u5355\u4f4d",
+            "type": "string"
+          },
+          "gender": {
+            "description": "\u6027\u522b",
+            "type": "string"
+          },
+          "name": {
+            "description": "\u59d3\u540d",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "TeamMemberRequest": {
+        "properties": {
+          "athlete_no": {
+            "description": "\u8fd0\u52a8\u5458\u53f7",
+            "type": "string"
+          },
+          "athlete_type": {
+            "description": "\u8fd0\u52a8\u5458\u7c7b\u578b\uff1acompetitive/fun",
+            "type": "string"
+          },
+          "team_id": {
+            "description": "\u961f\u4f0d ID",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "team_id",
+          "athlete_type",
+          "athlete_no"
+        ],
+        "type": "object"
+      },
+      "UpdateProgressRequest": {
+        "properties": {
+          "event_id": {
+            "description": "\u9879\u76ee ID\uff08\u8868\u5355\u517c\u5bb9\u7528\uff09",
+            "type": "integer"
+          },
+          "print_done": {
+            "description": "\u516c\u793a\u6253\u5370\u662f\u5426\u5b8c\u6210",
+            "type": "boolean"
+          },
+          "record_done": {
+            "description": "\u6210\u7ee9\u5f55\u5165\u662f\u5426\u5b8c\u6210",
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "description": "\u8fd0\u52a8\u4f1a\u79ef\u5206\u4e0e\u6210\u7ee9\u7ba1\u7406\u7cfb\u7edf\u5bf9\u5916 API \u6587\u6863\u3002",
+    "title": "Sports-Point API",
+    "version": "1.0.0"
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/api/v1/athletes": {
+      "get": {
+        "description": "\u6309\u7c7b\u578b\u548c\u5173\u952e\u8bcd\u67e5\u8be2\u8fd0\u52a8\u5458\u5217\u8868\u3002",
+        "parameters": [
+          {
+            "description": "\u8fd0\u52a8\u5458\u7c7b\u578b\uff1acompetitive/fun",
+            "in": "query",
+            "name": "athlete_type",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u8fd0\u52a8\u5458\u53f7\u3001\u59d3\u540d\u6216\u5355\u4f4d\u5173\u952e\u8bcd",
+            "in": "query",
+            "name": "keyword",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Athlete"
+                      },
+                      "type": "array"
+                    },
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "page_size": {
+                      "type": "integer"
+                    },
+                    "total": {
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u67e5\u8be2\u8fd0\u52a8\u5458",
+        "tags": [
+          "\u8fd0\u52a8\u5458"
+        ]
+      },
+      "post": {
+        "description": "\u6309\u5355\u4f4d\u540d\u79f0\u65b0\u589e\u7ade\u6280\u6216\u8da3\u5473\u8fd0\u52a8\u5458\u3002",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAthleteRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAthleteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u65b0\u589e\u8fd0\u52a8\u5458",
+        "tags": [
+          "\u8fd0\u52a8\u5458"
+        ]
+      }
+    },
+    "/api/v1/athletes/delete": {
+      "post": {
+        "description": "\u901a\u8fc7\u8fd0\u52a8\u5458\u7c7b\u578b\u548c\u8fd0\u52a8\u5458\u53f7\u5220\u9664\u8fd0\u52a8\u5458\u3002",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteAthleteRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteAthleteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u5220\u9664\u8fd0\u52a8\u5458\uff08\u8868\u5355\u517c\u5bb9\uff09",
+        "tags": [
+          "\u8fd0\u52a8\u5458"
+        ]
+      }
+    },
+    "/api/v1/athletes/registered-events": {
+      "get": {
+        "description": "\u901a\u8fc7\u67e5\u8be2\u53c2\u6570\u67e5\u8be2\u6307\u5b9a\u8fd0\u52a8\u5458\u5df2\u7ecf\u62a5\u540d\u7684\u4e2a\u4eba\u9879\u76ee\u3002",
+        "parameters": [
+          {
+            "description": "\u8fd0\u52a8\u5458\u7c7b\u578b\uff1acompetitive/fun",
+            "in": "query",
+            "name": "athlete_type",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u8fd0\u52a8\u5458\u53f7",
+            "in": "query",
+            "name": "athlete_no",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Registration"
+                      },
+                      "type": "array"
+                    },
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "total": {
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u67e5\u8be2\u8fd0\u52a8\u5458\u5df2\u62a5\u540d\u9879\u76ee\uff08\u517c\u5bb9\uff09",
+        "tags": [
+          "\u8fd0\u52a8\u5458\u62a5\u540d"
+        ]
+      }
+    },
+    "/api/v1/athletes/registrations/add": {
+      "post": {
+        "description": "\u901a\u8fc7\u8868\u5355\u6216 JSON \u4e3a\u8fd0\u52a8\u5458\u589e\u52a0\u4e2a\u4eba\u9879\u76ee\u62a5\u540d\u3002",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u589e\u52a0\u8fd0\u52a8\u5458\u62a5\u540d\uff08\u8868\u5355\u517c\u5bb9\uff09",
+        "tags": [
+          "\u8fd0\u52a8\u5458\u62a5\u540d"
+        ]
+      }
+    },
+    "/api/v1/athletes/registrations/remove": {
+      "post": {
+        "description": "\u901a\u8fc7\u8868\u5355\u6216 JSON \u79fb\u9664\u8fd0\u52a8\u5458\u4e2a\u4eba\u9879\u76ee\u62a5\u540d\u3002",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u5220\u9664\u8fd0\u52a8\u5458\u62a5\u540d\uff08\u8868\u5355\u517c\u5bb9\uff09",
+        "tags": [
+          "\u8fd0\u52a8\u5458\u62a5\u540d"
+        ]
+      }
+    },
+    "/api/v1/athletes/{athlete_type}/{athlete_no}": {
+      "delete": {
+        "description": "\u901a\u8fc7\u8def\u5f84\u53c2\u6570\u5220\u9664\u8fd0\u52a8\u5458\u3002",
+        "parameters": [
+          {
+            "description": "\u8fd0\u52a8\u5458\u7c7b\u578b\uff1acompetitive/fun",
+            "in": "path",
+            "name": "athlete_type",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u8fd0\u52a8\u5458\u53f7",
+            "in": "path",
+            "name": "athlete_no",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u5220\u9664\u8fd0\u52a8\u5458",
+        "tags": [
+          "\u8fd0\u52a8\u5458"
+        ]
+      }
+    },
+    "/api/v1/athletes/{athlete_type}/{athlete_no}/registrations": {
+      "get": {
+        "description": "\u67e5\u8be2\u6307\u5b9a\u8fd0\u52a8\u5458\u5df2\u7ecf\u62a5\u540d\u7684\u4e2a\u4eba\u9879\u76ee\u3002",
+        "parameters": [
+          {
+            "description": "\u8fd0\u52a8\u5458\u7c7b\u578b\uff1acompetitive/fun",
+            "in": "path",
+            "name": "athlete_type",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u8fd0\u52a8\u5458\u53f7",
+            "in": "path",
+            "name": "athlete_no",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Registration"
+                      },
+                      "type": "array"
+                    },
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "total": {
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u67e5\u8be2\u8fd0\u52a8\u5458\u5df2\u62a5\u540d\u9879\u76ee",
+        "tags": [
+          "\u8fd0\u52a8\u5458\u62a5\u540d"
+        ]
+      }
+    },
+    "/api/v1/athletes/{athlete_type}/{athlete_no}/registrations/{event_id}": {
+      "delete": {
+        "description": "\u79fb\u9664\u6307\u5b9a\u8fd0\u52a8\u5458\u7684\u4e00\u4e2a\u4e2a\u4eba\u9879\u76ee\u62a5\u540d\u3002",
+        "parameters": [
+          {
+            "description": "\u8fd0\u52a8\u5458\u7c7b\u578b\uff1acompetitive/fun",
+            "in": "path",
+            "name": "athlete_type",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u8fd0\u52a8\u5458\u53f7",
+            "in": "path",
+            "name": "athlete_no",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u9879\u76ee ID",
+            "in": "path",
+            "name": "event_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u5220\u9664\u8fd0\u52a8\u5458\u62a5\u540d",
+        "tags": [
+          "\u8fd0\u52a8\u5458\u62a5\u540d"
+        ]
+      },
+      "post": {
+        "description": "\u4e3a\u6307\u5b9a\u8fd0\u52a8\u5458\u589e\u52a0\u4e00\u4e2a\u4e2a\u4eba\u9879\u76ee\u62a5\u540d\u3002",
+        "parameters": [
+          {
+            "description": "\u8fd0\u52a8\u5458\u7c7b\u578b\uff1acompetitive/fun",
+            "in": "path",
+            "name": "athlete_type",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u8fd0\u52a8\u5458\u53f7",
+            "in": "path",
+            "name": "athlete_no",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u9879\u76ee ID",
+            "in": "path",
+            "name": "event_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u589e\u52a0\u8fd0\u52a8\u5458\u62a5\u540d",
+        "tags": [
+          "\u8fd0\u52a8\u5458\u62a5\u540d"
+        ]
+      }
+    },
+    "/api/v1/datasets/{view}": {
+      "get": {
+        "description": "\u67e5\u8be2\u9879\u76ee\u3001\u8fd0\u52a8\u5458\u3001\u90e8\u95e8\u3001\u961f\u4f0d\u3001\u62a5\u540d\u3001\u6210\u7ee9\u3001\u79ef\u5206\u699c\u7b49\u6570\u636e\u89c6\u56fe\u3002",
+        "parameters": [
+          {
+            "description": "\u6570\u636e\u89c6\u56fe\u540d\u79f0",
+            "in": "path",
+            "name": "view",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u9875\u7801\uff0c\u4ece 1 \u5f00\u59cb",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "\u6bcf\u9875\u6570\u91cf",
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "\u5173\u952e\u8bcd\u7b5b\u9009",
+            "in": "query",
+            "name": "keyword",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u90e8\u95e8\u540d\u79f0\u7b5b\u9009",
+            "in": "query",
+            "name": "department_name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u6027\u522b\u7b5b\u9009\uff1amale/female/mixed",
+            "in": "query",
+            "name": "gender",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u7ec4\u522b\u7b5b\u9009",
+            "in": "query",
+            "name": "age_group",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u9879\u76ee\u7c7b\u522b\u7b5b\u9009\uff1acompetitive/fun",
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u6210\u7ee9\u7b56\u7565\u7b5b\u9009",
+            "in": "query",
+            "name": "scoring_strategy",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u6392\u5e8f\u5b57\u6bb5",
+            "in": "query",
+            "name": "sort_by",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u6392\u5e8f\u65b9\u5411\uff1aasc/desc",
+            "in": "query",
+            "name": "sort_dir",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u5206\u9875\u67e5\u8be2\u6570\u636e\u89c6\u56fe",
+        "tags": [
+          "\u6570\u636e\u67e5\u8be2"
+        ]
+      }
+    },
+    "/api/v1/events": {
+      "get": {
+        "description": "\u8fd4\u56de\u5168\u90e8\u6bd4\u8d5b\u9879\u76ee\u3002",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Event"
+                      },
+                      "type": "array"
+                    },
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "total": {
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u67e5\u8be2\u9879\u76ee\u5217\u8868",
+        "tags": [
+          "\u9879\u76ee"
+        ]
+      }
+    },
+    "/api/v1/events/progress": {
+      "get": {
+        "description": "\u67e5\u8be2\u6240\u6709\u9879\u76ee\u7684\u6210\u7ee9\u5f55\u5165\u548c\u516c\u793a\u6253\u5370\u5b8c\u6210\u72b6\u6001\u3002",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/EventProgress"
+                      },
+                      "type": "array"
+                    },
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "total": {
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u67e5\u8be2\u9879\u76ee\u6d41\u7a0b\u72b6\u6001",
+        "tags": [
+          "\u9879\u76ee\u6d41\u7a0b"
+        ]
+      }
+    },
+    "/api/v1/events/progress/update": {
+      "post": {
+        "description": "\u901a\u8fc7\u8868\u5355\u6216 JSON \u66f4\u65b0\u9879\u76ee\u6d41\u7a0b\u72b6\u6001\u3002",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProgressRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProgressRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u66f4\u65b0\u9879\u76ee\u6d41\u7a0b\u72b6\u6001\uff08\u8868\u5355\u517c\u5bb9\uff09",
+        "tags": [
+          "\u9879\u76ee\u6d41\u7a0b"
+        ]
+      }
+    },
+    "/api/v1/events/{event_id}/progress": {
+      "put": {
+        "description": "\u66f4\u65b0\u6307\u5b9a\u9879\u76ee\u7684\u6210\u7ee9\u5f55\u5165\u5b8c\u6210\u548c\u6253\u5370\u5b8c\u6210\u72b6\u6001\u3002",
+        "parameters": [
+          {
+            "description": "\u9879\u76ee ID",
+            "in": "path",
+            "name": "event_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProgressRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProgressRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u66f4\u65b0\u9879\u76ee\u6d41\u7a0b\u72b6\u6001",
+        "tags": [
+          "\u9879\u76ee\u6d41\u7a0b"
+        ]
+      }
+    },
+    "/api/v1/exports/{view}": {
+      "get": {
+        "description": "\u6309\u7b5b\u9009\u6761\u4ef6\u5bfc\u51fa\u6307\u5b9a\u6570\u636e\u89c6\u56fe\u7684 CSV \u6587\u4ef6\u3002",
+        "parameters": [
+          {
+            "description": "\u6570\u636e\u89c6\u56fe\u540d\u79f0",
+            "in": "path",
+            "name": "view",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u5173\u952e\u8bcd\u7b5b\u9009",
+            "in": "query",
+            "name": "keyword",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u90e8\u95e8\u540d\u79f0\u7b5b\u9009",
+            "in": "query",
+            "name": "department_name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u6027\u522b\u7b5b\u9009\uff1amale/female/mixed",
+            "in": "query",
+            "name": "gender",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u7ec4\u522b\u7b5b\u9009",
+            "in": "query",
+            "name": "age_group",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u9879\u76ee\u7c7b\u522b\u7b5b\u9009\uff1acompetitive/fun",
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u6210\u7ee9\u7b56\u7565\u7b5b\u9009",
+            "in": "query",
+            "name": "scoring_strategy",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "CSV \u6587\u4ef6"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u5bfc\u51fa\u6570\u636e\u89c6\u56fe CSV",
+        "tags": [
+          "\u5bfc\u51fa"
+        ]
+      }
+    },
+    "/api/v1/imports/athletes/{athlete_type}": {
+      "post": {
+        "description": "\u4e0a\u4f20\u5e76\u5bfc\u5165\u7ade\u6280\u6216\u8da3\u5473\u8fd0\u52a8\u5458\u540d\u5355 CSV \u6587\u4ef6\u3002",
+        "parameters": [
+          {
+            "description": "\u8fd0\u52a8\u5458\u7c7b\u578b\uff1acompetitive/fun",
+            "in": "path",
+            "name": "athlete_type",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "file": {
+                    "description": "CSV \u6587\u4ef6",
+                    "format": "binary",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "file"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u5bfc\u5165\u8fd0\u52a8\u5458 CSV",
+        "tags": [
+          "\u5bfc\u5165"
+        ]
+      }
+    },
+    "/api/v1/imports/events": {
+      "post": {
+        "description": "\u4e0a\u4f20\u5e76\u5bfc\u5165\u9879\u76ee CSV \u6587\u4ef6\u3002",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "file": {
+                    "description": "CSV \u6587\u4ef6",
+                    "format": "binary",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "file"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u5bfc\u5165\u9879\u76ee CSV",
+        "tags": [
+          "\u5bfc\u5165"
+        ]
+      }
+    },
+    "/api/v1/imports/registrations/template": {
+      "get": {
+        "description": "\u6309\u9879\u76ee\u7c7b\u522b\u751f\u6210\u62a5\u540d\u77e9\u9635 CSV \u6a21\u677f\u3002",
+        "parameters": [
+          {
+            "description": "\u9879\u76ee\u7c7b\u522b\uff1acompetitive/fun",
+            "in": "query",
+            "name": "category",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "CSV \u6a21\u677f\u6587\u4ef6"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u4e0b\u8f7d\u62a5\u540d\u77e9\u9635\u6a21\u677f",
+        "tags": [
+          "\u5bfc\u5165"
+        ]
+      }
+    },
+    "/api/v1/imports/registrations/{target_category}": {
+      "post": {
+        "description": "\u4e0a\u4f20\u5e76\u5bfc\u5165\u7ade\u6280\u6216\u8da3\u5473\u9879\u76ee\u62a5\u540d\u77e9\u9635 CSV \u6587\u4ef6\u3002",
+        "parameters": [
+          {
+            "description": "\u9879\u76ee\u7c7b\u522b\uff1acompetitive/fun",
+            "in": "path",
+            "name": "target_category",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "file": {
+                    "description": "CSV \u6587\u4ef6",
+                    "format": "binary",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "file"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u5bfc\u5165\u62a5\u540d\u77e9\u9635 CSV",
+        "tags": [
+          "\u5bfc\u5165"
+        ]
+      }
+    },
+    "/api/v1/imports/setup": {
+      "post": {
+        "description": "\u521d\u59cb\u5316\u6216\u66f4\u65b0\u6bd4\u8d5b\u65e5\u671f\u3002",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetMeetDateRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/SetMeetDateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u8bbe\u7f6e\u6bd4\u8d5b\u65e5\u671f",
+        "tags": [
+          "\u5bfc\u5165"
+        ]
+      }
+    },
+    "/api/v1/imports/templates/{name}": {
+      "get": {
+        "description": "\u4e0b\u8f7d\u9759\u6001 CSV \u5bfc\u5165\u6a21\u677f\u6587\u4ef6\u3002",
+        "parameters": [
+          {
+            "description": "\u6a21\u677f\u6587\u4ef6\u540d\u6216\u8def\u5f84",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "CSV \u6a21\u677f\u6587\u4ef6"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u4e0b\u8f7d\u5bfc\u5165\u6a21\u677f",
+        "tags": [
+          "\u5bfc\u5165"
+        ]
+      }
+    },
+    "/api/v1/maintenance/clear-data": {
+      "post": {
+        "description": "\u6309\u786e\u8ba4\u6587\u672c\u3001\u786e\u8ba4\u7801\u548c\u52fe\u9009\u72b6\u6001\u6e05\u7a7a\u6307\u5b9a\u4e1a\u52a1\u8868\u6570\u636e\u3002",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClearDataRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/ClearDataRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u6e05\u7a7a\u6307\u5b9a\u6570\u636e\u8868",
+        "tags": [
+          "\u7ef4\u62a4"
+        ]
+      }
+    },
+    "/api/v1/notices/personal-result.pdf": {
+      "get": {
+        "description": "\u6309\u9879\u76ee\u548c\u6a21\u677f\u751f\u6210\u4e2a\u4eba\u9879\u76ee\u6210\u7ee9\u516c\u793a PDF\u3002",
+        "parameters": [
+          {
+            "description": "\u9879\u76ee ID",
+            "in": "query",
+            "name": "event_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "XLSX \u6a21\u677f\u6587\u4ef6\u540d",
+            "in": "query",
+            "name": "template_name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "PDF \u6587\u4ef6"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u9884\u89c8\u4e2a\u4eba\u6210\u7ee9\u516c\u793a PDF",
+        "tags": [
+          "\u516c\u793a"
+        ]
+      }
+    },
+    "/api/v1/notices/personal-result.xlsx": {
+      "get": {
+        "description": "\u6309\u9879\u76ee\u548c\u6a21\u677f\u5bfc\u51fa\u4e2a\u4eba\u9879\u76ee\u6210\u7ee9\u516c\u793a\u5355\u3002",
+        "parameters": [
+          {
+            "description": "\u9879\u76ee ID",
+            "in": "query",
+            "name": "event_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "XLSX \u6a21\u677f\u6587\u4ef6\u540d",
+            "in": "query",
+            "name": "template_name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "XLSX \u6587\u4ef6"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u5bfc\u51fa\u4e2a\u4eba\u6210\u7ee9\u516c\u793a XLSX",
+        "tags": [
+          "\u516c\u793a"
+        ]
+      }
+    },
+    "/api/v1/notices/team-result.pdf": {
+      "get": {
+        "description": "\u6309\u9879\u76ee\u548c\u6a21\u677f\u751f\u6210\u56e2\u4f53\u9879\u76ee\u6210\u7ee9\u516c\u793a PDF\u3002",
+        "parameters": [
+          {
+            "description": "\u9879\u76ee ID",
+            "in": "query",
+            "name": "event_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "XLSX \u6a21\u677f\u6587\u4ef6\u540d",
+            "in": "query",
+            "name": "template_name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "PDF \u6587\u4ef6"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u9884\u89c8\u56e2\u4f53\u6210\u7ee9\u516c\u793a PDF",
+        "tags": [
+          "\u516c\u793a"
+        ]
+      }
+    },
+    "/api/v1/notices/team-result.xlsx": {
+      "get": {
+        "description": "\u6309\u9879\u76ee\u548c\u6a21\u677f\u5bfc\u51fa\u56e2\u4f53\u9879\u76ee\u6210\u7ee9\u516c\u793a\u5355\u3002",
+        "parameters": [
+          {
+            "description": "\u9879\u76ee ID",
+            "in": "query",
+            "name": "event_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "XLSX \u6a21\u677f\u6587\u4ef6\u540d",
+            "in": "query",
+            "name": "template_name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "XLSX \u6587\u4ef6"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u5bfc\u51fa\u56e2\u4f53\u6210\u7ee9\u516c\u793a XLSX",
+        "tags": [
+          "\u516c\u793a"
+        ]
+      }
+    },
+    "/api/v1/results": {
+      "get": {
+        "description": "\u5206\u9875\u67e5\u8be2\u6210\u7ee9\u8bb0\u5f55\u3002",
+        "parameters": [
+          {
+            "description": "\u9875\u7801\uff0c\u4ece 1 \u5f00\u59cb",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "\u6bcf\u9875\u6570\u91cf",
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "\u5173\u952e\u8bcd\u7b5b\u9009",
+            "in": "query",
+            "name": "keyword",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u90e8\u95e8\u540d\u79f0\u7b5b\u9009",
+            "in": "query",
+            "name": "department_name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u6027\u522b\u7b5b\u9009\uff1amale/female/mixed",
+            "in": "query",
+            "name": "gender",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u7ec4\u522b\u7b5b\u9009",
+            "in": "query",
+            "name": "age_group",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u9879\u76ee\u7c7b\u522b\u7b5b\u9009\uff1acompetitive/fun",
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u6210\u7ee9\u7b56\u7565\u7b5b\u9009",
+            "in": "query",
+            "name": "scoring_strategy",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u6392\u5e8f\u5b57\u6bb5",
+            "in": "query",
+            "name": "sort_by",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u6392\u5e8f\u65b9\u5411\uff1aasc/desc",
+            "in": "query",
+            "name": "sort_dir",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Result"
+                      },
+                      "type": "array"
+                    },
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "page_size": {
+                      "type": "integer"
+                    },
+                    "total": {
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u5206\u9875\u67e5\u8be2\u6210\u7ee9",
+        "tags": [
+          "\u6210\u7ee9"
+        ]
+      },
+      "post": {
+        "description": "\u5f55\u5165\u4e2a\u4eba\u6216\u56e2\u4f53\u9879\u76ee\u6210\u7ee9\uff0c\u5e76\u6309\u89c4\u5219\u8ba1\u7b97\u79ef\u5206\u3002",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateResultRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateResultRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u5f55\u5165\u6210\u7ee9",
+        "tags": [
+          "\u6210\u7ee9"
+        ]
+      }
+    },
+    "/api/v1/rules": {
+      "get": {
+        "description": "\u8bfb\u53d6\u5f53\u524d\u79ef\u5206\u3001\u6210\u7ee9\u7b56\u7565\u548c\u7ec4\u522b\u89c4\u5219\u914d\u7f6e\u3002",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RuleConfigResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u8bfb\u53d6\u89c4\u5219\u914d\u7f6e",
+        "tags": [
+          "\u89c4\u5219"
+        ]
+      },
+      "put": {
+        "description": "\u4fdd\u5b58\u5b8c\u6574\u89c4\u5219\u914d\u7f6e\u5bf9\u8c61\u3002",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RuleSaveRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/RuleSaveRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u4fdd\u5b58\u89c4\u5219\u914d\u7f6e",
+        "tags": [
+          "\u89c4\u5219"
+        ]
+      }
+    },
+    "/api/v1/settings/report-environment": {
+      "post": {
+        "description": "\u4fdd\u5b58\u6210\u7ee9\u516c\u793a\u5355\u4f7f\u7528\u7684\u65e5\u671f\u3001\u5929\u6c14\u3001\u98ce\u5411\u3001\u6e29\u5ea6\u7b49\u73af\u5883\u4fe1\u606f\u3002",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportEnvironmentRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportEnvironmentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u4fdd\u5b58\u516c\u793a\u73af\u5883\u4fe1\u606f",
+        "tags": [
+          "\u516c\u793a"
+        ]
+      }
+    },
+    "/api/v1/status": {
+      "get": {
+        "description": "\u67e5\u8be2\u7cfb\u7edf\u521d\u59cb\u5316\u68c0\u67e5\u7ed3\u679c\u3002",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitStatus"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u67e5\u8be2\u521d\u59cb\u5316\u72b6\u6001",
+        "tags": [
+          "\u7cfb\u7edf\u72b6\u6001"
+        ]
+      }
+    },
+    "/api/v1/teams": {
+      "get": {
+        "description": "\u6309\u9879\u76ee\u3001\u90e8\u95e8\u548c\u5173\u952e\u8bcd\u67e5\u8be2\u961f\u4f0d\u5217\u8868\u3002",
+        "parameters": [
+          {
+            "description": "\u961f\u4f0d\u6216\u6210\u5458\u5173\u952e\u8bcd",
+            "in": "query",
+            "name": "keyword",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u90e8\u95e8\u540d\u79f0",
+            "in": "query",
+            "name": "department_name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "\u9879\u76ee ID",
+            "in": "query",
+            "name": "event_id",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/Team"
+                      },
+                      "type": "array"
+                    },
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "total": {
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u67e5\u8be2\u961f\u4f0d",
+        "tags": [
+          "\u961f\u4f0d"
+        ]
+      },
+      "post": {
+        "description": "\u4e3a\u6307\u5b9a\u90e8\u95e8\u548c\u56e2\u4f53\u9879\u76ee\u65b0\u589e\u961f\u4f0d\u3002",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTeamRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTeamRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u65b0\u589e\u961f\u4f0d",
+        "tags": [
+          "\u961f\u4f0d"
+        ]
+      }
+    },
+    "/api/v1/teams/batch-add": {
+      "post": {
+        "description": "\u6309\u591a\u4e2a\u90e8\u95e8\u4e3a\u540c\u4e00\u4e2a\u56e2\u4f53\u9879\u76ee\u6279\u91cf\u521b\u5efa\u961f\u4f0d\u3002",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchAddTeamsRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchAddTeamsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u6279\u91cf\u65b0\u589e\u961f\u4f0d",
+        "tags": [
+          "\u961f\u4f0d"
+        ]
+      }
+    },
+    "/api/v1/teams/delete": {
+      "post": {
+        "description": "\u901a\u8fc7\u961f\u4f0d ID \u5220\u9664\u961f\u4f0d\u3002",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteTeamRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteTeamRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u5220\u9664\u961f\u4f0d\uff08\u8868\u5355\u517c\u5bb9\uff09",
+        "tags": [
+          "\u961f\u4f0d"
+        ]
+      }
+    },
+    "/api/v1/teams/members": {
+      "get": {
+        "description": "\u901a\u8fc7\u67e5\u8be2\u53c2\u6570\u67e5\u8be2\u6307\u5b9a\u961f\u4f0d\u6210\u5458\u3002",
+        "parameters": [
+          {
+            "description": "\u961f\u4f0d ID",
+            "in": "query",
+            "name": "team_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/TeamMember"
+                      },
+                      "type": "array"
+                    },
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "total": {
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u67e5\u8be2\u961f\u4f0d\u6210\u5458\uff08\u517c\u5bb9\uff09",
+        "tags": [
+          "\u961f\u4f0d\u6210\u5458"
+        ]
+      }
+    },
+    "/api/v1/teams/members/add": {
+      "post": {
+        "description": "\u901a\u8fc7\u8868\u5355\u6216 JSON \u589e\u52a0\u961f\u4f0d\u6210\u5458\u3002",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TeamMemberRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/TeamMemberRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u589e\u52a0\u961f\u4f0d\u6210\u5458\uff08\u8868\u5355\u517c\u5bb9\uff09",
+        "tags": [
+          "\u961f\u4f0d\u6210\u5458"
+        ]
+      }
+    },
+    "/api/v1/teams/members/remove": {
+      "post": {
+        "description": "\u901a\u8fc7\u8868\u5355\u6216 JSON \u5220\u9664\u961f\u4f0d\u6210\u5458\u3002",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TeamMemberRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/TeamMemberRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u5220\u9664\u961f\u4f0d\u6210\u5458\uff08\u8868\u5355\u517c\u5bb9\uff09",
+        "tags": [
+          "\u961f\u4f0d\u6210\u5458"
+        ]
+      }
+    },
+    "/api/v1/teams/{team_id}": {
+      "delete": {
+        "description": "\u901a\u8fc7\u8def\u5f84\u53c2\u6570\u5220\u9664\u961f\u4f0d\u3002",
+        "parameters": [
+          {
+            "description": "\u961f\u4f0d ID",
+            "in": "path",
+            "name": "team_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u5220\u9664\u961f\u4f0d",
+        "tags": [
+          "\u961f\u4f0d"
+        ]
+      }
+    },
+    "/api/v1/teams/{team_id}/members": {
+      "delete": {
+        "description": "\u4ece\u6307\u5b9a\u961f\u4f0d\u79fb\u9664\u8fd0\u52a8\u5458\u6210\u5458\u3002",
+        "parameters": [
+          {
+            "description": "\u961f\u4f0d ID",
+            "in": "path",
+            "name": "team_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TeamMemberRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/TeamMemberRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u5220\u9664\u961f\u4f0d\u6210\u5458",
+        "tags": [
+          "\u961f\u4f0d\u6210\u5458"
+        ]
+      },
+      "get": {
+        "description": "\u67e5\u8be2\u6307\u5b9a\u961f\u4f0d\u6210\u5458\u3002",
+        "parameters": [
+          {
+            "description": "\u961f\u4f0d ID",
+            "in": "path",
+            "name": "team_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/TeamMember"
+                      },
+                      "type": "array"
+                    },
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "total": {
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u67e5\u8be2\u961f\u4f0d\u6210\u5458",
+        "tags": [
+          "\u961f\u4f0d\u6210\u5458"
+        ]
+      },
+      "post": {
+        "description": "\u4e3a\u6307\u5b9a\u961f\u4f0d\u589e\u52a0\u8fd0\u52a8\u5458\u6210\u5458\u3002",
+        "parameters": [
+          {
+            "description": "\u961f\u4f0d ID",
+            "in": "path",
+            "name": "team_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TeamMemberRequest"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/TeamMemberRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkResponse"
+                }
+              }
+            },
+            "description": "\u6210\u529f"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "\u8bf7\u6c42\u5931\u8d25"
+          }
+        },
+        "summary": "\u589e\u52a0\u961f\u4f0d\u6210\u5458",
+        "tags": [
+          "\u961f\u4f0d\u6210\u5458"
+        ]
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "\u6570\u636e\u67e5\u8be2"
+    },
+    {
+      "name": "\u8fd0\u52a8\u5458"
+    },
+    {
+      "name": "\u8fd0\u52a8\u5458\u62a5\u540d"
+    },
+    {
+      "name": "\u9879\u76ee"
+    },
+    {
+      "name": "\u9879\u76ee\u6d41\u7a0b"
+    },
+    {
+      "name": "\u5bfc\u5165"
+    },
+    {
+      "name": "\u5bfc\u51fa"
+    },
+    {
+      "name": "\u6210\u7ee9"
+    },
+    {
+      "name": "\u961f\u4f0d"
+    },
+    {
+      "name": "\u961f\u4f0d\u6210\u5458"
+    },
+    {
+      "name": "\u516c\u793a"
+    },
+    {
+      "name": "\u89c4\u5219"
+    },
+    {
+      "name": "\u7ef4\u62a4"
+    },
+    {
+      "name": "\u7cfb\u7edf\u72b6\u6001"
+    }
+  ]
+}
