@@ -5,7 +5,7 @@ export type Athlete = {
   name: string;
   athlete_type: string;
   gender: string;
-  age_group: string;
+  group: string;
   department_name: string;
   athlete_ref_id: number;
   registered_events: string;
@@ -32,7 +32,7 @@ export function addAthlete(body: {
   name: string;
   gender: string;
   department_name: string;
-  age_group?: string;
+  group?: string;
 }) {
   return request<{ ok: true }>("/athletes", { method: "POST", body: JSON.stringify(body) });
 }
@@ -48,7 +48,7 @@ export function deleteAthlete(athleteType: string, athleteNo: string) {
 // --- registrations ---
 
 export function queryRegisteredEvents(athleteType: string, athleteNo: string) {
-  return request<{ items: { id: number; name: string; label: string; gender: string; age_group: string }[]; total: number }>(
+  return request<{ items: { id: number; name: string; label: string; gender: string; group: string }[]; total: number }>(
     `/athletes/registered-events?athlete_type=${athleteType}&athlete_no=${athleteNo}`
   );
 }
@@ -62,7 +62,7 @@ export function removeRegistrationForm(body: { athlete_type: string; athlete_no:
 }
 
 export function queryRegistrations(athleteType: string, athleteNo: string) {
-  return request<{ items: { id: number; name: string; label: string; gender: string; age_group: string }[]; total: number }>(
+  return request<{ items: { id: number; name: string; label: string; gender: string; group: string }[]; total: number }>(
     `/athletes/${athleteType}/${athleteNo}/registrations`
   );
 }

@@ -67,20 +67,20 @@ export function downloadImportTemplate(name: string) {
 
 // --- attempt notices ---
 
-export function previewPersonalAttemptPdf(eventId: number, templateName: string) {
-  return `${BASE}/notices/personal-attempt.pdf?event_id=${eventId}&template_name=${templateName}`;
+export function previewPersonalAttemptPdf(eventId: number, templateName: string, attemptNumber: number) {
+  return `${BASE}/notices/personal-attempt.pdf?event_id=${eventId}&template_name=${templateName}&attempt_number=${attemptNumber}`;
 }
 
-export function previewTeamAttemptPdf(eventId: number, templateName: string) {
-  return `${BASE}/notices/team-attempt.pdf?event_id=${eventId}&template_name=${templateName}`;
+export function previewTeamAttemptPdf(eventId: number, templateName: string, attemptNumber: number) {
+  return `${BASE}/notices/team-attempt.pdf?event_id=${eventId}&template_name=${templateName}&attempt_number=${attemptNumber}`;
 }
 
-export function exportPersonalAttemptXlsx(eventId: number, templateName: string) {
-  return `${BASE}/notices/personal-attempt.xlsx?event_id=${eventId}&template_name=${templateName}`;
+export function exportPersonalAttemptXlsx(eventId: number, templateName: string, attemptNumber: number) {
+  return `${BASE}/notices/personal-attempt.xlsx?event_id=${eventId}&template_name=${templateName}&attempt_number=${attemptNumber}`;
 }
 
-export function exportTeamAttemptXlsx(eventId: number, templateName: string) {
-  return `${BASE}/notices/team-attempt.xlsx?event_id=${eventId}&template_name=${templateName}`;
+export function exportTeamAttemptXlsx(eventId: number, templateName: string, attemptNumber: number) {
+  return `${BASE}/notices/team-attempt.xlsx?event_id=${eventId}&template_name=${templateName}&attempt_number=${attemptNumber}`;
 }
 
 // --- exports ---

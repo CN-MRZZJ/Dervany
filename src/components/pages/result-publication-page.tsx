@@ -23,7 +23,7 @@ function alabel(ag: string) { return ag === "A" ? "甲组" : ag === "B" ? "乙�
 
 export function ResultPublicationPage() {
   const [env, setEnv] = React.useState<EnvInfo>({ date: todayISO(), wind_direction: "", wind_speed: "", air_quality: "", weather: "", temperature_high: "", temperature_low: "" });
-  const [events, setEvents] = React.useState<{ id: number; name: string; is_individual: number; gender: string; age_group: string }[]>([]);
+  const [events, setEvents] = React.useState<{ id: number; name: string; is_individual: number; gender: string; group: string }[]>([]);
   const [indEvent, setIndEvent] = React.useState("");
   const [indTemplate, setIndTemplate] = React.useState("personal_notice_template.xlsx");
   const [indFrameSrc, setIndFrameSrc] = React.useState("");
@@ -101,7 +101,7 @@ function PublishCard({
   title, events, eventVal, onEventChange, templateVal, onTemplateChange,
   onPreview, onExport, frameSrc, templates,
 }: {
-  title: string; events: { id: number; name: string; is_individual: number; gender: string; age_group: string }[];
+  title: string; events: { id: number; name: string; is_individual: number; gender: string; group: string }[];
   eventVal: string; onEventChange: (v: string) => void;
   templateVal: string; onTemplateChange: (v: string) => void;
   onPreview: () => void; onExport: () => void;
@@ -114,7 +114,7 @@ function PublishCard({
       <CardContent>
         <div className="flex flex-wrap items-end gap-3 mb-3">
           <div className="w-[240px]"><div className="text-xs font-medium text-slate-700 mb-1">项目</div>
-            <Select value={eventVal} onChange={(e) => onEventChange(e.target.value)}><option value="">选择项目</option>{events.map((e) => (<option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{alabel(e.age_group)}</option>))}</Select>
+            <Select value={eventVal} onChange={(e) => onEventChange(e.target.value)}><option value="">选择项目</option>{events.map((e) => (<option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{alabel(e.group)}</option>))}</Select>
           </div>
           <div className="w-[200px]"><div className="text-xs font-medium text-slate-700 mb-1">模板</div>
             <Select value={templateVal} onChange={(e) => onTemplateChange(e.target.value)}><option value="">选择模板</option>{templates.map((t) => (<option key={t.value} value={t.value}>{t.label}</option>))}</Select>

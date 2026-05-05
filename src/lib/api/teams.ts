@@ -7,7 +7,7 @@ export type Team = {
   event_name: string;
   event_id: number;
   gender: string;
-  age_group: string;
+  group: string;
   member_count: number;
   members_summary: string;
 };

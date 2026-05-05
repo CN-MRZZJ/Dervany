@@ -21,8 +21,8 @@ import {
 const AGE_LABELS: Record<string, string> = { A: "甲组", B: "乙组", C: "丙组" };
 function glabel(g: string) { return g === "male" ? "男" : g === "female" ? "女" : "混合"; }
 function alabel(ag: string) { return AGE_LABELS[ag] || ag; }
-function eventOptionLabel(e: { name: string; gender: string; age_group: string }) {
-  return `${e.name} ${glabel(e.gender)}${alabel(e.age_group)}`;
+function eventOptionLabel(e: { name: string; gender: string; group: string }) {
+  return `${e.name} ${glabel(e.gender)}${alabel(e.group)}`;
 }
 
 export function AthleteOpsPage() {
@@ -44,7 +44,7 @@ export function AthleteOpsPage() {
   const [regLoading, setRegLoading] = React.useState(false);
 
   // all events for add-registration picker
-  const [allEvents, setAllEvents] = React.useState<{ id: number; name: string; category: string; gender: string; age_group: string; is_individual: number }[]>([]);
+  const [allEvents, setAllEvents] = React.useState<{ id: number; name: string; category: string; gender: string; group: string; is_individual: number }[]>([]);
   React.useEffect(() => { queryEvents().then((d) => setAllEvents(d.items)).catch(() => {}); }, []);
 
   // add form
@@ -86,7 +86,7 @@ export function AthleteOpsPage() {
   async function handleAdd() {
     if (!aNo || !aName || !aDept) return;
     try {
-      await addAthlete({ athlete_type: aType, athlete_no: aNo, name: aName, gender: aGender, department_name: aDept, age_group: aAge || undefined });
+      await addAthlete({ athlete_type: aType, athlete_no: aNo, name: aName, gender: aGender, department_name: aDept, group: aAge || undefined });
       setMsg("新增成功"); setANo(""); setAName(""); setShowAdd(false);
     } catch (e) { setMsg(e instanceof Error ? e.message : "新增失败"); }
   }
@@ -178,7 +178,7 @@ export function AthleteOpsPage() {
                     <Td>{a.athlete_no}</Td>
                     <Td className="font-medium">{a.name}</Td>
                     <Td>{a.gender === "male" ? "男" : "女"}</Td>
-                    <Td>{AGE_LABELS[a.age_group] || a.age_group}</Td>
+                    <Td>{AGE_LABELS[a.group] || a.group}</Td>
                     <Td>{a.department_name}</Td>
                   </tr>
                 ))}
@@ -204,7 +204,7 @@ export function AthleteOpsPage() {
                 <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 space-y-2 text-sm">
                   <div className="flex justify-between"><span className="text-slate-500">运动员号</span><span className="font-medium">{selected.athlete_no}</span></div>
                   <div className="flex justify-between"><span className="text-slate-500">性别</span><span>{selected.gender === "male" ? "男" : "女"}</span></div>
-                  <div className="flex justify-between"><span className="text-slate-500">组别</span><span>{AGE_LABELS[selected.age_group] || selected.age_group}</span></div>
+                  <div className="flex justify-between"><span className="text-slate-500">组别</span><span>{AGE_LABELS[selected.group] || selected.group}</span></div>
                   <div className="flex justify-between"><span className="text-slate-500">单位</span><span className="font-medium">{selected.department_name}</span></div>
                   <div className="flex justify-between"><span className="text-slate-500">已报名数</span><span>{selected.registration_count}</span></div>
                 </div>

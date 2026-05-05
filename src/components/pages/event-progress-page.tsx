@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { RefreshCcw, ChevronRight, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { queryEventProgress, updateProgressForm, type SessionProgress } from "@/lib/api";
+import { queryEventProgress, updateProgressForm, queryEventTypes, type SessionProgress } from "@/lib/api";
 
 const STAGES = [
   { key: "checkin", label: "检录", color: "bg-amber-500", textColor: "text-amber-600", bgColor: "bg-amber-50", borderColor: "border-amber-200" },
@@ -37,6 +37,7 @@ export function EventProgressPage() {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState("");
   const [keyword, setKeyword] = React.useState("");
+  const [typeMap, setTypeMap] = React.useState<Record<string, string>>({});
 
   async function load() {
     setLoading(true);
@@ -51,12 +52,19 @@ export function EventProgressPage() {
     }
   }
 
-  React.useEffect(() => { load(); }, []);
+  React.useEffect(() => {
+    load();
+    queryEventTypes().then((d) => {
+      const m: Record<string, string> = {};
+      d.items.forEach((et) => { m[et.code] = et.name; });
+      setTypeMap(m);
+    }).catch(() => {});
+  }, []);
 
   const filtered = sessions.filter((s) => {
     if (!keyword) return true;
     const kw = keyword.toLowerCase();
-    return [s.name, s.category, genderText(s.gender), s.age_group]
+    return [s.name, s.category, genderText(s.gender), s.group]
       .join(" ").toLowerCase().includes(kw);
   });
 
@@ -141,13 +149,11 @@ export function EventProgressPage() {
                       <div key={s.id} className="flex items-center gap-4 rounded-lg border border-slate-200 bg-white px-4 py-3 hover:border-slate-300 hover:shadow-sm transition-all">
                         <div className="min-w-0 w-[140px]">
                           <div className="text-sm font-semibold text-slate-900 truncate">{s.name}</div>
-                          <div className="text-[11px] text-slate-400">#{s.id} · {genderText(s.gender)} · {s.age_group}</div>
+                          <div className="text-[11px] text-slate-400">#{s.id} · {genderText(s.gender)} · {s.group}</div>
                         </div>
                         <div className="flex items-center gap-1.5 shrink-0">
                           <Badge variant={s.category_text === "竞技" ? "info" : "neutral"}>{s.category_text}</Badge>
-                          <Badge variant={s.event_type === "track" ? "info" : s.event_type === "field" ? "warning" : "success"}>
-                            {s.event_type === "track" ? "径赛" : s.event_type === "field" ? "田赛" : "趣味"}
-                          </Badge>
+                          <Badge variant="info">{typeMap[s.event_type] || s.event_type}</Badge>
                         </div>
                         <div className="shrink-0 w-[210px]">
                           <div className="flex items-center justify-between">

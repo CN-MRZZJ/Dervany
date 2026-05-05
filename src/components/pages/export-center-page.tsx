@@ -70,7 +70,7 @@ export function ExportCenterPage() {
             <div className="w-[110px]"><div className="text-xs font-medium text-slate-700 mb-1">组别</div>
               <Select value={ageGroup} onChange={(e) => setAgeGroup(e.target.value)}><option value="">全部</option><option value="A">甲组</option><option value="B">乙组</option><option value="C">丙组</option></Select>
             </div>
-            <Button onClick={() => doExport({ keyword, department_name: departmentName, category, scoring_strategy: scoringStrategy, gender, age_group: ageGroup })}>
+            <Button onClick={() => doExport({ keyword, department_name: departmentName, category, scoring_strategy: scoringStrategy, gender, group: ageGroup })}>
               <FileDown className="h-4 w-4" />导出
             </Button>
           </div>

@@ -5,7 +5,7 @@ export type EventInfo = {
   name: string;
   category: string;
   gender: string;
-  age_group: string;
+  group: string;
   event_type: string;
   scoring_strategy: string;
   is_individual: number;
@@ -25,8 +25,8 @@ export type SessionProgress = {
   event_type: string;
   gender: string;
   gender_text: string;
-  age_group: string;
-  age_group_text: string;
+  group: string;
+  group_text: string;
   scoring_strategy: string;
   is_individual: number;
   checkin_done: number;

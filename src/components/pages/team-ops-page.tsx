@@ -37,7 +37,7 @@ export function TeamOpsPage() {
   const pageSize = 12;
 
   // events & departments
-  const [events, setEvents] = React.useState<{ id: number; name: string; is_individual: number; gender: string; age_group: string }[]>([]);
+  const [events, setEvents] = React.useState<{ id: number; name: string; is_individual: number; gender: string; group: string }[]>([]);
   const [departments, setDepartments] = React.useState<string[]>([]);
   React.useEffect(() => {
     queryEvents().then((d) => setEvents(d.items)).catch(() => {});
@@ -183,7 +183,7 @@ export function TeamOpsPage() {
               <Select value={queryEvent} onChange={(e) => setQueryEvent(e.target.value)}>
                 <option value="">全部团体项目</option>
                 {teamEvents.map((e) => (
-                  <option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{alabel(e.age_group)}</option>
+                  <option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{alabel(e.group)}</option>
                 ))}
               </Select>
             </div>
@@ -377,7 +377,7 @@ export function TeamOpsPage() {
                 <Select value={aEventId} onChange={(e) => setAEventId(e.target.value)}>
                   <option value="">请选择</option>
                   {teamEvents.map((e) => (
-                    <option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{alabel(e.age_group)}</option>
+                    <option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{alabel(e.group)}</option>
                   ))}
                 </Select>
               </div>
@@ -417,7 +417,7 @@ export function TeamOpsPage() {
                 <Select value={batchEvent} onChange={(e) => setBatchEvent(e.target.value)}>
                   <option value="">请选择项目</option>
                   {teamEvents.map((e) => (
-                    <option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{alabel(e.age_group)}</option>
+                    <option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{alabel(e.group)}</option>
                   ))}
                 </Select>
               </div>

@@ -5,7 +5,7 @@ export type ResultRecord = {
   event_name: string;
   category: string;
   scoring_strategy: string;
-  age_group: string;
+  group: string;
   result_type: string;
   athlete_type: string;
   target_name: string;
@@ -23,7 +23,7 @@ export function queryResults(params: {
   keyword?: string;
   department_name?: string;
   gender?: string;
-  age_group?: string;
+  group?: string;
   category?: string;
   scoring_strategy?: string;
   sort_by?: string;

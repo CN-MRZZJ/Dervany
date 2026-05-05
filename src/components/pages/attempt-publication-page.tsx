@@ -23,12 +23,14 @@ function alabel(ag: string) { return ag === "A" ? "甲组" : ag === "B" ? "乙�
 
 export function AttemptPublicationPage() {
   const [env, setEnv] = React.useState<EnvInfo>({ date: todayISO(), wind_direction: "", wind_speed: "", air_quality: "", weather: "", temperature_high: "", temperature_low: "" });
-  const [events, setEvents] = React.useState<{ id: number; name: string; is_individual: number; gender: string; age_group: string }[]>([]);
+  const [events, setEvents] = React.useState<{ id: number; name: string; is_individual: number; gender: string; group: string }[]>([]);
   const [indEvent, setIndEvent] = React.useState("");
   const [indTemplate, setIndTemplate] = React.useState("personal_attempt_template.xlsx");
+  const [indAttemptNum, setIndAttemptNum] = React.useState("1");
   const [indFrameSrc, setIndFrameSrc] = React.useState("");
   const [teamEvent, setTeamEvent] = React.useState("");
   const [teamTemplate, setTeamTemplate] = React.useState("team_attempt_template.xlsx");
+  const [teamAttemptNum, setTeamAttemptNum] = React.useState("1");
   const [teamFrameSrc, setTeamFrameSrc] = React.useState("");
 
   React.useEffect(() => {
@@ -75,9 +77,11 @@ export function AttemptPublicationPage() {
         onEventChange={setIndEvent}
         templateVal={indTemplate}
         onTemplateChange={setIndTemplate}
+        attemptNum={indAttemptNum}
+        onAttemptNumChange={setIndAttemptNum}
         templates={[{ value: "personal_attempt_template.xlsx", label: "个人轮次标准模板" }]}
-        onPreview={() => indEvent && indTemplate && setIndFrameSrc(previewPersonalAttemptPdf(Number(indEvent), indTemplate))}
-        onExport={() => indEvent && indTemplate && window.open(exportPersonalAttemptXlsx(Number(indEvent), indTemplate))}
+        onPreview={() => indEvent && indTemplate && setIndFrameSrc(previewPersonalAttemptPdf(Number(indEvent), indTemplate, Number(indAttemptNum)))}
+        onExport={() => indEvent && indTemplate && window.open(exportPersonalAttemptXlsx(Number(indEvent), indTemplate, Number(indAttemptNum)))}
         frameSrc={indFrameSrc}
       />
 
@@ -88,9 +92,11 @@ export function AttemptPublicationPage() {
         onEventChange={setTeamEvent}
         templateVal={teamTemplate}
         onTemplateChange={setTeamTemplate}
+        attemptNum={teamAttemptNum}
+        onAttemptNumChange={setTeamAttemptNum}
         templates={[{ value: "team_attempt_template.xlsx", label: "团体轮次标准模板" }]}
-        onPreview={() => teamEvent && teamTemplate && setTeamFrameSrc(previewTeamAttemptPdf(Number(teamEvent), teamTemplate))}
-        onExport={() => teamEvent && teamTemplate && window.open(exportTeamAttemptXlsx(Number(teamEvent), teamTemplate))}
+        onPreview={() => teamEvent && teamTemplate && setTeamFrameSrc(previewTeamAttemptPdf(Number(teamEvent), teamTemplate, Number(teamAttemptNum)))}
+        onExport={() => teamEvent && teamTemplate && window.open(exportTeamAttemptXlsx(Number(teamEvent), teamTemplate, Number(teamAttemptNum)))}
         frameSrc={teamFrameSrc}
       />
     </div>
@@ -99,11 +105,13 @@ export function AttemptPublicationPage() {
 
 function PublishCard({
   title, events, eventVal, onEventChange, templateVal, onTemplateChange,
+  attemptNum, onAttemptNumChange,
   onPreview, onExport, frameSrc, templates,
 }: {
-  title: string; events: { id: number; name: string; is_individual: number; gender: string; age_group: string }[];
+  title: string; events: { id: number; name: string; is_individual: number; gender: string; group: string }[];
   eventVal: string; onEventChange: (v: string) => void;
   templateVal: string; onTemplateChange: (v: string) => void;
+  attemptNum: string; onAttemptNumChange: (v: string) => void;
   onPreview: () => void; onExport: () => void;
   frameSrc: string;
   templates: { value: string; label: string }[];
@@ -114,10 +122,13 @@ function PublishCard({
       <CardContent>
         <div className="flex flex-wrap items-end gap-3 mb-3">
           <div className="w-[240px]"><div className="text-xs font-medium text-slate-700 mb-1">项目</div>
-            <Select value={eventVal} onChange={(e) => onEventChange(e.target.value)}><option value="">选择项目</option>{events.map((e) => (<option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{alabel(e.age_group)}</option>))}</Select>
+            <Select value={eventVal} onChange={(e) => onEventChange(e.target.value)}><option value="">选择项目</option>{events.map((e) => (<option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{alabel(e.group)}</option>))}</Select>
           </div>
           <div className="w-[200px]"><div className="text-xs font-medium text-slate-700 mb-1">模板</div>
             <Select value={templateVal} onChange={(e) => onTemplateChange(e.target.value)}><option value="">选择模板</option>{templates.map((t) => (<option key={t.value} value={t.value}>{t.label}</option>))}</Select>
+          </div>
+          <div className="w-[90px]"><div className="text-xs font-medium text-slate-700 mb-1">轮次</div>
+            <Input value={attemptNum} onChange={(e) => onAttemptNumChange(e.target.value)} type="number" min="1" />
           </div>
           <Button variant="secondary" onClick={onExport}><Download className="h-4 w-4" />导出 XLSX</Button>
           <Button onClick={onPreview}><Eye className="h-4 w-4" />在线预览</Button>

@@ -55,6 +55,13 @@ export {
   saveRules,
 } from "./rules";
 export {
+  type EventType,
+  queryEventTypes,
+  createEventType,
+  updateEventType,
+  deleteEventType,
+} from "./event-types";
+export {
   type SystemStatus,
   queryStatus,
   saveReportEnv,
