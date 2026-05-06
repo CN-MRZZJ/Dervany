@@ -9,7 +9,7 @@ import { FileDropzone } from "@/components/ui/file-dropzone";
 import { Badge } from "@/components/ui/badge";
 import { Download, FileText, Users, ClipboardList, Check, ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { setupMeetDate, importEventsCsv, importAthletesCsv, importRegistrationsCsv, downloadImportTemplate } from "@/lib/api";
+import { setupMeetDate, importEventsCsv, importAthletesCsv, importRegistrationsCsv, downloadImportTemplate, downloadRegistrationTemplate } from "@/lib/api";
 
 const STEPS = [
   { num: 1, label: "项目 CSV", icon: FileText, desc: "导入比赛项目列表", fileKey: "events" },
@@ -21,10 +21,10 @@ const STEPS = [
 
 const TEMPLATES = [
   { label: "项目模板", key: "events_template.csv" },
-  { label: "竞技名单模板", key: "competitive_roster_template.csv" },
-  { label: "趣味名单模板", key: "fun_roster_template.csv" },
-  { label: "竞技报名矩阵模板", key: "registration_matrix_template.csv", category: "competitive" },
-  { label: "趣味报名矩阵模板", key: "registration_matrix_template.csv", category: "fun" },
+  { label: "竞技运动员模板", key: "competitive_athletes_template.csv" },
+  { label: "趣味运动员模板", key: "fun_athletes_template.csv" },
+  { label: "竞技报名矩阵模板", key: "registration_template", category: "competitive" },
+  { label: "趣味报名矩阵模板", key: "registration_template", category: "fun" },
 ];
 
 export function ImportCenterPage() {
@@ -133,7 +133,7 @@ export function ImportCenterPage() {
               {TEMPLATES.map((t) => (
                 <a
                   key={t.label}
-                  href={t.category ? `/api/v1/imports/registrations/template?category=${t.category}` : downloadImportTemplate(t.key)}
+                  href={t.category ? downloadRegistrationTemplate(t.category) : downloadImportTemplate(t.key)}
                   className="w-full flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors bg-slate-50 text-slate-700 hover:bg-slate-100"
                 >
                   <Download className="h-3.5 w-3.5 shrink-0" />

@@ -51,9 +51,12 @@ export function importRegistrationsCsv(targetCategory: string, file: File) {
 }
 
 export function setupMeetDate(meetDate: string) {
+  const formData = new FormData();
+  formData.append("meet_date", meetDate);
   return request<{ ok: true }>("/imports/setup", {
     method: "POST",
-    body: JSON.stringify({ meet_date: meetDate }),
+    body: formData,
+    headers: {},
   });
 }
 
