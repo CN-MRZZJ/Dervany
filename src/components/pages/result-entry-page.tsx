@@ -12,11 +12,11 @@ import { UserCheck, User, Users, Trophy, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { queryEvents, submitResult, queryResults, queryAthletes, queryTeams, queryAttempts, voidAttempt, type ResultRecord, type Athlete, type AttemptRecord } from "@/lib/api";
 import { useToast, ToastOverlay } from "@/components/ui/toast";
+import { useGroupLabels } from "@/lib/use-group-labels";
 
 const STORAGE_KEY = "sportsmeet.result_entry.v1";
 
 function glabel(g: string) { return g === "male" ? "男" : g === "female" ? "女" : "混合"; }
-function alabel(ag: string) { return ag === "A" ? "甲组" : ag === "B" ? "乙组" : ag === "C" ? "丙组" : ag; }
 
 export function ResultEntryPage() {
   const [enteredBy, setEnteredBy] = React.useState("");
@@ -24,6 +24,7 @@ export function ResultEntryPage() {
   const [tab, setTab] = React.useState<"individual" | "team">("individual");
   const [events, setEvents] = React.useState<{ id: number; name: string; category: string; is_individual: number; gender: string; group: string }[]>([]);
   const { toast, show, dismiss } = useToast();
+  const { label } = useGroupLabels();
   const [submitting, setSubmitting] = React.useState(false);
 
   React.useEffect(() => {
@@ -174,7 +175,7 @@ export function ResultEntryPage() {
             <CardContent>
               <div className="max-w-md space-y-3">
                 <div><div className="text-xs font-medium text-slate-700 mb-1">项目</div>
-                  <Select value={indEvent} onChange={(e) => { setIndEvent(e.target.value); setTimeout(() => indNoRef.current?.focus(), 0); }}><option value="">选择个人项目</option>{events.filter((e) => e.is_individual === 1).map((e) => (<option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{alabel(e.group)}</option>))}</Select>
+                  <Select value={indEvent} onChange={(e) => { setIndEvent(e.target.value); setTimeout(() => indNoRef.current?.focus(), 0); }}><option value="">选择个人项目</option>{events.filter((e) => e.is_individual === 1).map((e) => (<option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{label(e.group)}</option>))}</Select>
                 </div>
                 <div><div className="text-xs font-medium text-slate-700 mb-1">运动员号</div><Input ref={indNoRef} value={indNo} onChange={(e) => setIndNo(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && indNo.trim()) { e.preventDefault(); indPerfRef.current?.focus(); } }} placeholder="输入运动员号，回车跳成绩" /></div>
                 <div><div className="text-xs font-medium text-slate-700 mb-1">成绩</div><Input ref={indPerfRef} value={indPerf} onChange={(e) => setIndPerf(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && indPerf.trim()) { e.preventDefault(); submitInd(); } }} placeholder="如 12.34，回车提交" /></div>
@@ -231,7 +232,7 @@ export function ResultEntryPage() {
           <CardHeader><div className="flex items-center gap-2"><Users className="h-4 w-4 text-accent" /><CardTitle>团体成绩录入</CardTitle></div></CardHeader>
           <CardContent>
             <div className="max-w-md space-y-3">
-              <div><div className="text-xs font-medium text-slate-700 mb-1">项目</div><Select value={teEvent} onChange={(e) => setTeEvent(e.target.value)}><option value="">选择团体项目</option>{events.filter((e) => e.is_individual === 0).map((e) => (<option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{alabel(e.group)}</option>))}</Select></div>
+              <div><div className="text-xs font-medium text-slate-700 mb-1">项目</div><Select value={teEvent} onChange={(e) => setTeEvent(e.target.value)}><option value="">选择团体项目</option>{events.filter((e) => e.is_individual === 0).map((e) => (<option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{label(e.group)}</option>))}</Select></div>
               <div><div className="text-xs font-medium text-slate-700 mb-1">队伍</div><Select value={teId} onChange={(e) => setTeId(e.target.value)}><option value="">选择队伍</option>{teams.map((t) => (<option key={t.id} value={String(t.id)}>{t.team_name} · {t.department_name}</option>))}</Select></div>
               <div><div className="text-xs font-medium text-slate-700 mb-1">成绩</div><Input value={tePerf} onChange={(e) => setTePerf(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && tePerf.trim()) { e.preventDefault(); submitTeam(); } }} placeholder="如 45.67，回车提交" /></div>
               <details className="text-xs text-slate-400"><summary className="cursor-pointer">手动指定名次（可选）</summary><div className="mt-2"><Input type="number" min={1} value={teRank} onChange={(e) => setTeRank(e.target.value)} placeholder="留空则自动计算" /></div></details>

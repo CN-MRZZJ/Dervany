@@ -13,7 +13,6 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import {
   Users2, Search, Plus, Trash2, UserPlus, X, Loader2,
-  ChevronDown, ChevronUp,
 } from "lucide-react";
 import {
   queryTeams, addTeam, batchAddTeams, deleteTeamForm,
@@ -22,8 +21,9 @@ import {
   type Team,
 } from "@/lib/api";
 
+import { useGroupLabels } from "@/lib/use-group-labels";
+
 function glabel(g: string) { return g === "male" ? "男" : g === "female" ? "女" : "混合"; }
-function alabel(ag: string) { return ag === "A" ? "甲组" : ag === "B" ? "乙组" : ag === "C" ? "丙组" : ag; }
 
 export function TeamOpsPage() {
   // search
@@ -45,6 +45,9 @@ export function TeamOpsPage() {
       setDepartments(d.items.map((d) => d.name));
     }).catch(() => {});
   }, []);
+
+  // group labels
+  const { label } = useGroupLabels();
 
   // selection
   const [selected, setSelected] = React.useState<Team | null>(null);
@@ -157,7 +160,20 @@ export function TeamOpsPage() {
 
   return (
     <div className="space-y-4">
-      <Section title="队伍管理" description="查询、新增、删除队伍，管理队伍成员" />
+      <Section
+        title="队伍管理"
+        description="查询、新增、删除队伍，管理队伍成员"
+        right={
+          <div className="flex gap-2">
+            <Button size="sm" variant="secondary" onClick={() => { setBatchEvent(""); setBatchDepts({}); setShowBatch(true); }}>
+              <Users2 className="h-4 w-4" />批量新增
+            </Button>
+            <Button size="sm" onClick={() => { setADept(""); setAEventId(""); setATeamName(""); setShowAdd(true); }}>
+              <Plus className="h-4 w-4" />新增队伍
+            </Button>
+          </div>
+        }
+      />
 
       {msg && (
         <div className={cn(
@@ -183,7 +199,7 @@ export function TeamOpsPage() {
               <Select value={queryEvent} onChange={(e) => setQueryEvent(e.target.value)}>
                 <option value="">全部团体项目</option>
                 {teamEvents.map((e) => (
-                  <option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{alabel(e.group)}</option>
+                  <option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{label(e.group)}</option>
                 ))}
               </Select>
             </div>
@@ -355,117 +371,93 @@ export function TeamOpsPage() {
         )}
       </div>
 
-      {/* Add team - collapsible */}
-      <Card>
-        <CardHeader
-          className="cursor-pointer select-none hover:bg-slate-50/50 transition-colors"
-          onClick={() => setShowAdd(!showAdd)}
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Plus className="h-4 w-4 text-accent" />
-              <CardTitle>新增队伍</CardTitle>
+      {/* Add team modal */}
+      {showAdd && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30" onClick={() => setShowAdd(false)}>
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm mx-4 space-y-4" onClick={(e) => e.stopPropagation()}>
+            <div className="text-sm font-semibold text-slate-900">新增队伍</div>
+            <div>
+              <div className="text-xs font-medium text-slate-700 mb-1">团体项目</div>
+              <Select value={aEventId} onChange={(e) => setAEventId(e.target.value)}>
+                <option value="">请选择</option>
+                {teamEvents.map((e) => (
+                  <option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{label(e.group)}</option>
+                ))}
+              </Select>
             </div>
-            {showAdd ? <ChevronUp className="h-4 w-4 text-slate-400" /> : <ChevronDown className="h-4 w-4 text-slate-400" />}
+            <div>
+              <div className="text-xs font-medium text-slate-700 mb-1">归属单位</div>
+              <Input value={aDept} onChange={(e) => setADept(e.target.value)} placeholder="输入单位名称" />
+            </div>
+            <div>
+              <div className="text-xs font-medium text-slate-700 mb-1">队伍名称</div>
+              <Input value={aTeamName} onChange={(e) => setATeamName(e.target.value)} placeholder="输入队伍名称" />
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button variant="secondary" onClick={() => setShowAdd(false)}>取消</Button>
+              <Button onClick={handleAdd}>新增</Button>
+            </div>
           </div>
-        </CardHeader>
-        {showAdd && (
-          <CardContent>
-            <div className="max-w-md space-y-3">
-              <div>
-                <div className="text-xs font-medium text-slate-700 mb-1">团体项目</div>
-                <Select value={aEventId} onChange={(e) => setAEventId(e.target.value)}>
-                  <option value="">请选择</option>
-                  {teamEvents.map((e) => (
-                    <option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{alabel(e.group)}</option>
-                  ))}
-                </Select>
-              </div>
-              <div>
-                <div className="text-xs font-medium text-slate-700 mb-1">归属单位</div>
-                <Input value={aDept} onChange={(e) => setADept(e.target.value)} placeholder="输入单位名称" />
-              </div>
-              <div>
-                <div className="text-xs font-medium text-slate-700 mb-1">队伍名称</div>
-                <Input value={aTeamName} onChange={(e) => setATeamName(e.target.value)} placeholder="输入队伍名称" />
-              </div>
-              <Button onClick={handleAdd}>新增队伍</Button>
-            </div>
-          </CardContent>
-        )}
-      </Card>
+        </div>
+      )}
 
-      {/* Batch add - collapsible */}
-      <Card>
-        <CardHeader
-          className="cursor-pointer select-none hover:bg-slate-50/50 transition-colors"
-          onClick={() => setShowBatch(!showBatch)}
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Users2 className="h-4 w-4 text-accent" />
-              <CardTitle>批量新增</CardTitle>
+      {/* Batch add modal */}
+      {showBatch && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30" onClick={() => setShowBatch(false)}>
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4 space-y-4" onClick={(e) => e.stopPropagation()}>
+            <div className="text-sm font-semibold text-slate-900">批量新增队伍</div>
+            <div>
+              <div className="text-xs font-medium text-slate-700 mb-1">团体项目</div>
+              <Select value={batchEvent} onChange={(e) => setBatchEvent(e.target.value)}>
+                <option value="">请选择项目</option>
+                {teamEvents.map((e) => (
+                  <option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{label(e.group)}</option>
+                ))}
+              </Select>
             </div>
-            {showBatch ? <ChevronUp className="h-4 w-4 text-slate-400" /> : <ChevronDown className="h-4 w-4 text-slate-400" />}
-          </div>
-        </CardHeader>
-        {showBatch && (
-          <CardContent>
-            <div className="space-y-4">
-              <div className="w-[320px]">
-                <div className="text-xs font-medium text-slate-700 mb-1">团体项目</div>
-                <Select value={batchEvent} onChange={(e) => setBatchEvent(e.target.value)}>
-                  <option value="">请选择项目</option>
-                  {teamEvents.map((e) => (
-                    <option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{alabel(e.group)}</option>
-                  ))}
-                </Select>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-medium text-slate-700">
-                    选择单位
-                    {selectedDeptCount > 0 && <span className="ml-1 text-accent">({selectedDeptCount})</span>}
-                  </span>
-                  <div className="flex gap-1">
-                    <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={() => toggleAllDepts(true)}>全选</Button>
-                    <span className="text-slate-200">|</span>
-                    <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={() => toggleAllDepts(false)}>清空</Button>
-                  </div>
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-medium text-slate-700">
+                  选择单位
+                  {selectedDeptCount > 0 && <span className="ml-1 text-accent">({selectedDeptCount})</span>}
+                </span>
+                <div className="flex gap-1">
+                  <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={() => toggleAllDepts(true)}>全选</Button>
+                  <span className="text-slate-200">|</span>
+                  <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={() => toggleAllDepts(false)}>清空</Button>
                 </div>
-                {departments.length === 0 ? (
-                  <div className="rounded-md border border-dashed border-slate-200 bg-slate-50/50 py-8 text-center text-xs text-slate-400">
-                    加载单位中...
-                  </div>
-                ) : (
-                  <div className="flex flex-wrap gap-1.5 max-h-[180px] overflow-y-auto rounded-md border border-slate-200 bg-white p-3">
-                    {departments.map((d) => (
-                      <button
-                        key={d}
-                        type="button"
-                        onClick={() => setBatchDepts((p) => ({ ...p, [d]: !p[d] }))}
-                        className={cn(
-                          "rounded-md px-2.5 py-1 text-xs font-medium transition-all",
-                          batchDepts[d]
-                            ? "bg-accent text-white shadow-sm"
-                            : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                        )}
-                      >
-                        {d}
-                      </button>
-                    ))}
-                  </div>
-                )}
               </div>
-
-              <Button onClick={handleBatchAdd} disabled={!batchEvent || selectedDeptCount === 0}>
-                批量新增
-              </Button>
+              {departments.length === 0 ? (
+                <div className="rounded-md border border-dashed border-slate-200 bg-slate-50/50 py-8 text-center text-xs text-slate-400">
+                  加载单位中...
+                </div>
+              ) : (
+                <div className="flex flex-wrap gap-1.5 max-h-[180px] overflow-y-auto rounded-md border border-slate-200 bg-white p-3">
+                  {departments.map((d) => (
+                    <button
+                      key={d}
+                      type="button"
+                      onClick={() => setBatchDepts((p) => ({ ...p, [d]: !p[d] }))}
+                      className={cn(
+                        "rounded-md px-2.5 py-1 text-xs font-medium transition-all",
+                        batchDepts[d]
+                          ? "bg-accent text-white shadow-sm"
+                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      )}
+                    >
+                      {d}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
-          </CardContent>
-        )}
-      </Card>
+            <div className="flex gap-2 justify-end">
+              <Button variant="secondary" onClick={() => setShowBatch(false)}>取消</Button>
+              <Button onClick={handleBatchAdd} disabled={!batchEvent || selectedDeptCount === 0}>批量新增</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

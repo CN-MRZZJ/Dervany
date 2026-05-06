@@ -130,6 +130,8 @@ function ScoringTab({ config, onChangeDefault, onChangePolicy }: { config: Rules
   const [newName, setNewName] = React.useState("");
   const [newStrategy, setNewStrategy] = React.useState("time");
 
+  const [edits, setEdits] = React.useState<Record<string, { name?: string; scoring_strategy?: string }>>({});
+
   async function handleCreate() {
     if (!newCode.trim() || !newName.trim()) return;
     try {
@@ -143,6 +145,7 @@ function ScoringTab({ config, onChangeDefault, onChangePolicy }: { config: Rules
     try {
       await updateEventType(code, body);
       setItems((p) => p.map((it) => it.code === code ? { ...it, ...body } : it));
+      setEdits((p) => { const n = { ...p }; delete n[code]; return n; });
     } catch (e) { setErr(e instanceof Error ? e.message : "更新失败"); }
   }
 
@@ -165,20 +168,28 @@ function ScoringTab({ config, onChangeDefault, onChangePolicy }: { config: Rules
         <CardContent>
           <div className="space-y-2">
             {items.length === 0 && !adding && <div className="text-xs text-slate-400 text-center py-4">暂未配置项目类型，点击"新增"添加</div>}
-            {items.map((item) => (
-              <div key={item.code} className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-3">
-                <span className="text-sm font-mono font-medium text-slate-700 w-[100px]">{item.code}</span>
-                <Input value={item.name} onChange={(e) => handleUpdate(item.code, { name: e.target.value })} placeholder="显示名" className="w-[130px]" />
-                <span className="text-xs text-slate-400">策略</span>
-                <Select value={item.scoring_strategy} onChange={(e) => handleUpdate(item.code, { scoring_strategy: e.target.value })} className="flex-1">
-                  <option value="time">time（计时）</option>
-                  <option value="length">length（长度）</option>
-                  <option value="count">count（计数）</option>
-                  <option value="count_miss">count_miss（脱靶）</option>
-                </Select>
-                <Button variant="ghost" size="icon" onClick={() => handleDelete(item.code)}><Trash2 className="h-3.5 w-3.5 text-rose-500" /></Button>
-              </div>
-            ))}
+            {items.map((item) => {
+              const dirty = edits[item.code];
+              const displayName = dirty?.name ?? item.name;
+              const displayStrategy = dirty?.scoring_strategy ?? item.scoring_strategy;
+              return (
+                <div key={item.code} className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-3">
+                  <span className="text-sm font-mono font-medium text-slate-700 w-[100px]">{item.code}</span>
+                  <Input value={displayName} onChange={(e) => setEdits((p) => ({ ...p, [item.code]: { ...p[item.code], name: e.target.value } }))} placeholder="显示名" className="w-[130px]" />
+                  <span className="text-xs text-slate-400">策略</span>
+                  <Select value={displayStrategy} onChange={(e) => setEdits((p) => ({ ...p, [item.code]: { ...p[item.code], scoring_strategy: e.target.value } }))} className="flex-1">
+                    <option value="time">time（计时）</option>
+                    <option value="length">length（长度）</option>
+                    <option value="count">count（计数）</option>
+                    <option value="count_miss">count_miss（脱靶）</option>
+                  </Select>
+                  {dirty && (
+                    <Button variant="primary" size="sm" onClick={() => handleUpdate(item.code, dirty)}>保存</Button>
+                  )}
+                  <Button variant="ghost" size="icon" onClick={() => handleDelete(item.code)}><Trash2 className="h-3.5 w-3.5 text-rose-500" /></Button>
+                </div>
+              );
+            })}
             {adding && (
               <div className="flex items-center gap-3 rounded-lg border-2 border-accent/30 bg-accent-bg/30 p-3">
                 <Input value={newCode} onChange={(e) => setNewCode(e.target.value)} placeholder="代号（如 throw）" className="w-[100px]" />

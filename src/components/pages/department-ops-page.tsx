@@ -9,7 +9,7 @@ import { Table, Td, Th } from "@/components/ui/table";
 import { Pagination } from "@/components/ui/pagination";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { Building2, Search, Plus, Pencil, Trash2, Loader2, ChevronDown, ChevronUp } from "lucide-react";
+import { Building2, Search, Plus, Pencil, Trash2, Loader2 } from "lucide-react";
 import {
   queryDepartments, addDepartment, updateDepartment,
   deleteDepartmentForm, type Department,
@@ -85,7 +85,15 @@ export function DepartmentOpsPage() {
 
   return (
     <div className="space-y-4">
-      <Section title="单位管理" description="维护参赛单位，新增、编辑和删除" />
+      <Section
+        title="单位管理"
+        description="维护参赛单位，新增、编辑和删除"
+        right={
+          <Button size="sm" onClick={() => { setAName(""); setATotal(""); setShowAdd(true); }}>
+            <Plus className="h-4 w-4" />新增单位
+          </Button>
+        }
+      />
 
       {msg && (
         <div className={cn(
@@ -211,36 +219,26 @@ export function DepartmentOpsPage() {
         )}
       </div>
 
-      {/* Add - collapsible */}
-      <Card>
-        <CardHeader
-          className="cursor-pointer select-none hover:bg-slate-50/50 transition-colors"
-          onClick={() => setShowAdd(!showAdd)}
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Plus className="h-4 w-4 text-accent" />
-              <CardTitle>新增单位</CardTitle>
+      {/* Add modal */}
+      {showAdd && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30" onClick={() => setShowAdd(false)}>
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm mx-4 space-y-4" onClick={(e) => e.stopPropagation()}>
+            <div className="text-sm font-semibold text-slate-900">新增单位</div>
+            <div>
+              <div className="text-xs font-medium text-slate-700 mb-1">单位名称</div>
+              <Input value={aName} onChange={(e) => setAName(e.target.value)} placeholder="如 计算机学院" />
             </div>
-            {showAdd ? <ChevronUp className="h-4 w-4 text-slate-400" /> : <ChevronDown className="h-4 w-4 text-slate-400" />}
+            <div>
+              <div className="text-xs font-medium text-slate-700 mb-1">总人数（可选）</div>
+              <Input value={aTotal} onChange={(e) => setATotal(e.target.value.replace(/\D/g, ""))} type="number" placeholder="0" />
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button variant="secondary" onClick={() => setShowAdd(false)}>取消</Button>
+              <Button onClick={handleAdd}>新增</Button>
+            </div>
           </div>
-        </CardHeader>
-        {showAdd && (
-          <CardContent>
-            <div className="max-w-sm space-y-3">
-              <div>
-                <div className="text-xs font-medium text-slate-700 mb-1">单位名称</div>
-                <Input value={aName} onChange={(e) => setAName(e.target.value)} placeholder="如 计算机学院" />
-              </div>
-              <div>
-                <div className="text-xs font-medium text-slate-700 mb-1">总人数（可选）</div>
-                <Input value={aTotal} onChange={(e) => setATotal(e.target.value.replace(/\D/g, ""))} type="number" placeholder="0" />
-              </div>
-              <Button onClick={handleAdd}>新增单位</Button>
-            </div>
-          </CardContent>
-        )}
-      </Card>
+        </div>
+      )}
 
       {/* Edit dialog - inline modal */}
       {editing && (

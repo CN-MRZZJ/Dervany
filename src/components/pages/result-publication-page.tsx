@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Download, Eye, Printer, CloudRain } from "lucide-react";
 import { queryEvents, saveReportEnv, previewPersonalPdf, previewTeamPdf, exportPersonalXlsx, exportTeamXlsx } from "@/lib/api";
+import { useGroupLabels } from "@/lib/use-group-labels";
 
 type EnvInfo = {
   date: string; wind_direction: string; wind_speed: string;
@@ -19,11 +20,11 @@ const STORAGE_KEY = "sportsmeet.result_publication.v1";
 function todayISO() { return new Date().toISOString().slice(0, 10); }
 
 function glabel(g: string) { return g === "male" ? "男" : g === "female" ? "女" : "混合"; }
-function alabel(ag: string) { return ag === "A" ? "甲组" : ag === "B" ? "乙组" : ag === "C" ? "丙组" : ag; }
 
 export function ResultPublicationPage() {
   const [env, setEnv] = React.useState<EnvInfo>({ date: todayISO(), wind_direction: "", wind_speed: "", air_quality: "", weather: "", temperature_high: "", temperature_low: "" });
   const [events, setEvents] = React.useState<{ id: number; name: string; is_individual: number; gender: string; group: string }[]>([]);
+  const { label } = useGroupLabels();
   const [indEvent, setIndEvent] = React.useState("");
   const [indTemplate, setIndTemplate] = React.useState("personal_notice_template.xlsx");
   const [indFrameSrc, setIndFrameSrc] = React.useState("");
@@ -79,6 +80,7 @@ export function ResultPublicationPage() {
         onPreview={() => indEvent && indTemplate && setIndFrameSrc(previewPersonalPdf(Number(indEvent), indTemplate))}
         onExport={() => indEvent && indTemplate && window.open(exportPersonalXlsx(Number(indEvent), indTemplate))}
         frameSrc={indFrameSrc}
+        groupLabel={label}
       />
 
       <PublishCard
@@ -92,6 +94,7 @@ export function ResultPublicationPage() {
         onPreview={() => teamEvent && teamTemplate && setTeamFrameSrc(previewTeamPdf(Number(teamEvent), teamTemplate))}
         onExport={() => teamEvent && teamTemplate && window.open(exportTeamXlsx(Number(teamEvent), teamTemplate))}
         frameSrc={teamFrameSrc}
+        groupLabel={label}
       />
     </div>
   );
@@ -99,7 +102,7 @@ export function ResultPublicationPage() {
 
 function PublishCard({
   title, events, eventVal, onEventChange, templateVal, onTemplateChange,
-  onPreview, onExport, frameSrc, templates,
+  onPreview, onExport, frameSrc, templates, groupLabel,
 }: {
   title: string; events: { id: number; name: string; is_individual: number; gender: string; group: string }[];
   eventVal: string; onEventChange: (v: string) => void;
@@ -107,6 +110,7 @@ function PublishCard({
   onPreview: () => void; onExport: () => void;
   frameSrc: string;
   templates: { value: string; label: string }[];
+  groupLabel: (v: string) => string;
 }) {
   return (
     <Card>
@@ -114,7 +118,7 @@ function PublishCard({
       <CardContent>
         <div className="flex flex-wrap items-end gap-3 mb-3">
           <div className="w-[240px]"><div className="text-xs font-medium text-slate-700 mb-1">项目</div>
-            <Select value={eventVal} onChange={(e) => onEventChange(e.target.value)}><option value="">选择项目</option>{events.map((e) => (<option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{alabel(e.group)}</option>))}</Select>
+            <Select value={eventVal} onChange={(e) => onEventChange(e.target.value)}><option value="">选择项目</option>{events.map((e) => (<option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{groupLabel(e.group)}</option>))}</Select>
           </div>
           <div className="w-[200px]"><div className="text-xs font-medium text-slate-700 mb-1">模板</div>
             <Select value={templateVal} onChange={(e) => onTemplateChange(e.target.value)}><option value="">选择模板</option>{templates.map((t) => (<option key={t.value} value={t.value}>{t.label}</option>))}</Select>

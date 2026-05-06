@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Download, FileDown, Filter } from "lucide-react";
 import { exportViewCsv } from "@/lib/api";
+import { useGroupLabels } from "@/lib/use-group-labels";
 
 const DATA_VIEWS: Record<string, string> = {
   events: "项目", athletes: "运动员", results: "成绩",
@@ -15,6 +16,7 @@ const DATA_VIEWS: Record<string, string> = {
 };
 
 export function ExportCenterPage() {
+  const { athleteOptions } = useGroupLabels();
   const [view, setView] = React.useState("events");
   const [keyword, setKeyword] = React.useState("");
   const [departmentName, setDepartmentName] = React.useState("");
@@ -68,7 +70,7 @@ export function ExportCenterPage() {
               <Select value={gender} onChange={(e) => setGender(e.target.value)}><option value="">全部</option><option value="male">男</option><option value="female">女</option><option value="mixed">混合</option></Select>
             </div>
             <div className="w-[110px]"><div className="text-xs font-medium text-slate-700 mb-1">组别</div>
-              <Select value={ageGroup} onChange={(e) => setAgeGroup(e.target.value)}><option value="">全部</option><option value="A">甲组</option><option value="B">乙组</option><option value="C">丙组</option></Select>
+              <Select value={ageGroup} onChange={(e) => setAgeGroup(e.target.value)}><option value="">全部</option>{athleteOptions.map((g) => (<option key={g.value} value={g.value}>{g.label}</option>))}</Select>
             </div>
             <Button onClick={() => doExport({ keyword, department_name: departmentName, category, scoring_strategy: scoringStrategy, gender, group: ageGroup })}>
               <FileDown className="h-4 w-4" />导出

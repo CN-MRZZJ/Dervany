@@ -9,7 +9,7 @@ import { Select } from "@/components/ui/select";
 import { Table, Td, Th } from "@/components/ui/table";
 import { Pagination } from "@/components/ui/pagination";
 import { Badge } from "@/components/ui/badge";
-import { Users, Search, UserPlus, Trash2, Plus, X, Loader2, ChevronDown, ChevronUp } from "lucide-react";
+import { Users, Search, UserPlus, Trash2, Plus, X, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   queryAthletes, addAthlete, deleteAthleteForm,
@@ -17,12 +17,11 @@ import {
   queryRegisteredEvents, queryEvents,
   type Athlete,
 } from "@/lib/api";
+import { useGroupLabels } from "@/lib/use-group-labels";
 
-const AGE_LABELS: Record<string, string> = { A: "甲组", B: "乙组", C: "丙组" };
 function glabel(g: string) { return g === "male" ? "男" : g === "female" ? "女" : "混合"; }
-function alabel(ag: string) { return AGE_LABELS[ag] || ag; }
-function eventOptionLabel(e: { name: string; gender: string; group: string }) {
-  return `${e.name} ${glabel(e.gender)}${alabel(e.group)}`;
+function eventOptionLabel(e: { name: string; gender: string; group: string }, groupLabel: (v: string) => string) {
+  return `${e.name} ${glabel(e.gender)}${groupLabel(e.group)}`;
 }
 
 export function AthleteOpsPage() {
@@ -43,6 +42,9 @@ export function AthleteOpsPage() {
   const [regEvents, setRegEvents] = React.useState<{ id: number; name: string; label: string }[]>([]);
   const [regLoading, setRegLoading] = React.useState(false);
 
+  // group labels from rules
+  const { label, athleteOptions } = useGroupLabels();
+
   // all events for add-registration picker
   const [allEvents, setAllEvents] = React.useState<{ id: number; name: string; category: string; gender: string; group: string; is_individual: number }[]>([]);
   React.useEffect(() => { queryEvents().then((d) => setAllEvents(d.items)).catch(() => {}); }, []);
@@ -54,7 +56,7 @@ export function AthleteOpsPage() {
   const [aName, setAName] = React.useState("");
   const [aGender, setAGender] = React.useState("male");
   const [aDept, setADept] = React.useState("");
-  const [aAge, setAAge] = React.useState("A");
+  const [aAge, setAAge] = React.useState("");
 
   // add registration
   const [addRegEventId, setAddRegEventId] = React.useState("");
@@ -129,7 +131,15 @@ export function AthleteOpsPage() {
 
   return (
     <div className="space-y-4">
-      <Section title="运动员管理" description="查询、新增与删除运动员，管理报名项目" />
+      <Section
+        title="运动员管理"
+        description="查询、新增与删除运动员，管理报名项目"
+        right={
+          <Button size="sm" onClick={() => setShowAdd(true)}>
+            <UserPlus className="h-4 w-4" />新增运动员
+          </Button>
+        }
+      />
 
       {msg && (
         <div className={`rounded-md px-3 py-2 text-sm ${msg.includes("失败") ? "bg-rose-50 text-rose-600 border border-rose-200" : "bg-emerald-50 text-emerald-600 border border-emerald-200"}`}>
@@ -178,7 +188,7 @@ export function AthleteOpsPage() {
                     <Td>{a.athlete_no}</Td>
                     <Td className="font-medium">{a.name}</Td>
                     <Td>{a.gender === "male" ? "男" : "女"}</Td>
-                    <Td>{AGE_LABELS[a.group] || a.group}</Td>
+                    <Td>{label(a.group)}</Td>
                     <Td>{a.department_name}</Td>
                   </tr>
                 ))}
@@ -204,7 +214,7 @@ export function AthleteOpsPage() {
                 <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 space-y-2 text-sm">
                   <div className="flex justify-between"><span className="text-slate-500">运动员号</span><span className="font-medium">{selected.athlete_no}</span></div>
                   <div className="flex justify-between"><span className="text-slate-500">性别</span><span>{selected.gender === "male" ? "男" : "女"}</span></div>
-                  <div className="flex justify-between"><span className="text-slate-500">组别</span><span>{AGE_LABELS[selected.group] || selected.group}</span></div>
+                  <div className="flex justify-between"><span className="text-slate-500">组别</span><span>{label(selected.group)}</span></div>
                   <div className="flex justify-between"><span className="text-slate-500">单位</span><span className="font-medium">{selected.department_name}</span></div>
                   <div className="flex justify-between"><span className="text-slate-500">已报名数</span><span>{selected.registration_count}</span></div>
                 </div>
@@ -236,7 +246,7 @@ export function AthleteOpsPage() {
                       <option value="">选择项目</option>
                       {availableEvents
                         .filter((e) => !regEvents.some((r) => r.id === e.id))
-                        .map((e) => (<option key={e.id} value={String(e.id)}>{eventOptionLabel(e)}</option>))}
+                        .map((e) => (<option key={e.id} value={String(e.id)}>{eventOptionLabel(e, label)}</option>))}
                     </Select>
                     <Button size="sm" onClick={handleAddReg} disabled={!addRegEventId}><Plus className="h-3.5 w-3.5" /></Button>
                   </div>
@@ -251,37 +261,30 @@ export function AthleteOpsPage() {
         )}
       </div>
 
-      {/* Add athlete */}
-      <Card>
-        <CardHeader
-          className="cursor-pointer select-none hover:bg-slate-50/50 transition-colors"
-          onClick={() => setShowAdd(!showAdd)}
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2"><UserPlus className="h-4 w-4 text-accent" /><CardTitle>新增运动员</CardTitle></div>
-            {showAdd ? <ChevronUp className="h-4 w-4 text-slate-400" /> : <ChevronDown className="h-4 w-4 text-slate-400" />}
-          </div>
-        </CardHeader>
-        {showAdd && (
-          <CardContent>
-            <div className="max-w-md space-y-3">
-              <div className="grid grid-cols-2 gap-3">
-                <div><div className="text-xs font-medium text-slate-700 mb-1">类型</div><Select value={aType} onChange={(e) => setAType(e.target.value)}><option value="competitive">竞技</option><option value="fun">趣味</option></Select></div>
-                <div><div className="text-xs font-medium text-slate-700 mb-1">运动员号</div><Input value={aNo} onChange={(e) => setANo(e.target.value)} placeholder="如 C001" /></div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div><div className="text-xs font-medium text-slate-700 mb-1">姓名</div><Input value={aName} onChange={(e) => setAName(e.target.value)} placeholder="姓名" /></div>
-                <div><div className="text-xs font-medium text-slate-700 mb-1">性别</div><Select value={aGender} onChange={(e) => setAGender(e.target.value)}><option value="male">男</option><option value="female">女</option></Select></div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div><div className="text-xs font-medium text-slate-700 mb-1">归属单位</div><Input value={aDept} onChange={(e) => setADept(e.target.value)} placeholder="单位名称" /></div>
-                <div><div className="text-xs font-medium text-slate-700 mb-1">年龄组</div><Select value={aAge} onChange={(e) => setAAge(e.target.value)}><option value="A">甲组</option><option value="B">乙组</option><option value="C">丙组</option></Select></div>
-              </div>
-              <Button onClick={handleAdd}>新增运动员</Button>
+      {/* Add athlete modal */}
+      {showAdd && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30" onClick={() => setShowAdd(false)}>
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm mx-4 space-y-4" onClick={(e) => e.stopPropagation()}>
+            <div className="text-sm font-semibold text-slate-900">新增运动员</div>
+            <div className="grid grid-cols-2 gap-3">
+              <div><div className="text-xs font-medium text-slate-700 mb-1">类型</div><Select value={aType} onChange={(e) => setAType(e.target.value)}><option value="competitive">竞技</option><option value="fun">趣味</option></Select></div>
+              <div><div className="text-xs font-medium text-slate-700 mb-1">运动员号</div><Input value={aNo} onChange={(e) => setANo(e.target.value)} placeholder="如 C001" /></div>
             </div>
-          </CardContent>
-        )}
-      </Card>
+            <div className="grid grid-cols-2 gap-3">
+              <div><div className="text-xs font-medium text-slate-700 mb-1">姓名</div><Input value={aName} onChange={(e) => setAName(e.target.value)} placeholder="姓名" /></div>
+              <div><div className="text-xs font-medium text-slate-700 mb-1">性别</div><Select value={aGender} onChange={(e) => setAGender(e.target.value)}><option value="male">男</option><option value="female">女</option></Select></div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div><div className="text-xs font-medium text-slate-700 mb-1">归属单位</div><Input value={aDept} onChange={(e) => setADept(e.target.value)} placeholder="单位名称" /></div>
+              <div><div className="text-xs font-medium text-slate-700 mb-1">年龄组</div><Select value={aAge} onChange={(e) => setAAge(e.target.value)}><option value="">请选择</option>{athleteOptions.map((g) => (<option key={g.value} value={g.value}>{g.label}</option>))}</Select></div>
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button variant="secondary" onClick={() => setShowAdd(false)}>取消</Button>
+              <Button onClick={handleAdd}>新增</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
