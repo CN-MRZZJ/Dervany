@@ -58,7 +58,7 @@ Sidebar nav is data-driven from `NAV_GROUPS` in `src/lib/nav.ts`. Each item has 
 
 ### Backend API
 
-Backend is a separate Flask service running at the URL set in `NEXT_PUBLIC_API_BASE` (currently `https://sp.mrzzj.com:8080/api/v1`). API follows RESTful conventions — some endpoints use POST form-style mutations (`/athletes/delete`, `/athletes/registrations/add`), others use standard REST verbs.
+Backend is a separate Flask service. Its URL is configured via `NEXT_PUBLIC_API_BASE` env var (set in `.env.local`, not committed). API follows RESTful conventions — some endpoints use POST form-style mutations (`/athletes/delete`, `/athletes/registrations/add`), others use standard REST verbs.
 
 ## Behavioral Guidelines
 
