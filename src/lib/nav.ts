@@ -7,13 +7,14 @@ import {
   Eraser,
   Megaphone,
   ScrollText,
-  Table2,
   Settings2,
   ShieldCheck,
+  TrendingUp,
   Upload,
   Users,
   Users2,
   Building2,
+  Waypoints,
 } from "lucide-react";
 
 export type NavItem = {
@@ -35,12 +36,18 @@ export const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
+    label: "编排",
+    items: [
+      { href: "/lanes", label: "分道编排", Icon: Waypoints },
+      { href: "/advancement", label: "晋级管理", Icon: TrendingUp },
+    ],
+  },
+  {
     label: "赛务",
     items: [
       { href: "/progress", label: "比赛进度", Icon: CalendarClock },
       { href: "/results", label: "成绩录入", Icon: ClipboardEdit },
       { href: "/publish", label: "成绩公示", Icon: ScrollText },
-      { href: "/attempts", label: "轮次成绩", Icon: Table2 },
     ],
   },
   {

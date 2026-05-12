@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, Td, Th } from "@/components/ui/table";
 import { UserCheck, User, Users, Trophy, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { queryEvents, submitResult, queryResults, queryAthletes, queryTeams, queryAttempts, voidAttempt, type ResultRecord, type Athlete, type AttemptRecord } from "@/lib/api";
+import { queryEvents, submitResult, queryResults, queryAthletes, queryTeams, queryAttempts, voidAttempt, queryHeats, type ResultRecord, type Athlete, type AttemptRecord, type RoundHeats } from "@/lib/api";
 import { useToast, ToastOverlay } from "@/components/ui/toast";
 import { useGroupLabels } from "@/lib/use-group-labels";
 
@@ -49,9 +49,11 @@ export function ResultEntryPage() {
 
   // Individual
   const [indEvent, setIndEvent] = React.useState("");
+  const [indRound, setIndRound] = React.useState("");
   const [indNo, setIndNo] = React.useState("");
   const [indPerf, setIndPerf] = React.useState("");
   const [indRank, setIndRank] = React.useState("");
+  const [indRounds, setIndRounds] = React.useState<RoundHeats[]>([]);
   const indNoRef = React.useRef<HTMLInputElement>(null);
   const indPerfRef = React.useRef<HTMLInputElement>(null);
   React.useEffect(() => { indNoRef.current?.focus(); }, []);
@@ -64,12 +66,21 @@ export function ResultEntryPage() {
   const [attempts, setAttempts] = React.useState<AttemptRecord[]>([]);
   const [attemptsLoading, setAttemptsLoading] = React.useState(false);
 
+  // Fetch rounds when individual event changes
+  React.useEffect(() => {
+    if (!indEvent) { setIndRounds([]); setIndRound(""); return; }
+    queryHeats(Number(indEvent))
+      .then((d) => setIndRounds(d.data.rounds))
+      .catch(() => setIndRounds([]));
+  }, [indEvent]);
+
   async function loadAttempts() {
     if (!athleteInfo?.athlete_ref_id || !indEvent) { setAttempts([]); return; }
     setAttemptsLoading(true);
     try {
       const d = await queryAttempts({
         event_id: Number(indEvent),
+        round_id: indRound ? Number(indRound) : undefined,
         athlete_type: athleteInfo.athlete_type,
         athlete_ref_id: athleteInfo.athlete_ref_id,
       });
@@ -78,7 +89,7 @@ export function ResultEntryPage() {
     finally { setAttemptsLoading(false); }
   }
 
-  React.useEffect(() => { loadAttempts(); }, [athleteInfo?.athlete_ref_id, indEvent]);
+  React.useEffect(() => { loadAttempts(); }, [athleteInfo?.athlete_ref_id, indEvent, indRound]);
 
   async function handleVoid(attemptId: number, isVoid: boolean) {
     try {
@@ -105,7 +116,7 @@ export function ResultEntryPage() {
     if (!indEvent || !indNo.trim() || !indPerf.trim()) return;
     setSubmitting(true);
     try {
-      await submitResult({ event_id: Number(indEvent), athlete_no: indNo.trim(), athlete_type: events.find((e) => e.id === Number(indEvent))?.category || "competitive", entered_by: confirmedBy, performance: indPerf, rank: indRank ? Number(indRank) : undefined });
+      await submitResult({ event_id: Number(indEvent), round_id: indRound ? Number(indRound) : undefined, athlete_no: indNo.trim(), athlete_type: events.find((e) => e.id === Number(indEvent))?.category || "competitive", entered_by: confirmedBy, performance: indPerf, rank: indRank ? Number(indRank) : undefined });
       show("提交成功", "success");
     } catch (e) { show(e instanceof Error ? e.message : "提交失败", "error"); }
     finally {
@@ -117,10 +128,21 @@ export function ResultEntryPage() {
 
   // Team
   const [teEvent, setTeEvent] = React.useState("");
+  const [teRound, setTeRound] = React.useState("");
   const [teId, setTeId] = React.useState("");
   const [tePerf, setTePerf] = React.useState("");
   const [teRank, setTeRank] = React.useState("");
+  const [teRounds, setTeRounds] = React.useState<RoundHeats[]>([]);
   const [teams, setTeams] = React.useState<{ id: number; team_name: string; department_name: string }[]>([]);
+
+  // Fetch rounds when team event changes
+  React.useEffect(() => {
+    if (!teEvent) { setTeRounds([]); setTeRound(""); return; }
+    queryHeats(Number(teEvent))
+      .then((d) => setTeRounds(d.data.rounds))
+      .catch(() => setTeRounds([]));
+  }, [teEvent]);
+
   React.useEffect(() => {
     if (teEvent) {
       queryTeams({ event_id: Number(teEvent) }).then((d) => setTeams(d.items)).catch(() => setTeams([]));
@@ -133,7 +155,7 @@ export function ResultEntryPage() {
     if (!teEvent || !teId || !tePerf.trim()) return;
     setSubmitting(true);
     try {
-      await submitResult({ event_id: Number(teEvent), team_id: Number(teId), entered_by: confirmedBy, performance: tePerf, rank: teRank ? Number(teRank) : undefined });
+      await submitResult({ event_id: Number(teEvent), round_id: teRound ? Number(teRound) : undefined, team_id: Number(teId), entered_by: confirmedBy, performance: tePerf, rank: teRank ? Number(teRank) : undefined });
       show("提交成功", "success");
     } catch (e) { show(e instanceof Error ? e.message : "提交失败", "error"); }
     finally {
@@ -175,8 +197,16 @@ export function ResultEntryPage() {
             <CardContent>
               <div className="max-w-md space-y-3">
                 <div><div className="text-xs font-medium text-slate-700 mb-1">项目</div>
-                  <Select value={indEvent} onChange={(e) => { setIndEvent(e.target.value); setTimeout(() => indNoRef.current?.focus(), 0); }}><option value="">选择个人项目</option>{events.filter((e) => e.is_individual === 1).map((e) => (<option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{label(e.group)}</option>))}</Select>
+                  <Select value={indEvent} onChange={(e) => { setIndEvent(e.target.value); setIndRound(""); setTimeout(() => indNoRef.current?.focus(), 0); }}><option value="">选择个人项目</option>{events.filter((e) => e.is_individual === 1).map((e) => (<option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{label(e.group)}</option>))}</Select>
                 </div>
+                {indRounds.length > 0 && (
+                  <div><div className="text-xs font-medium text-slate-700 mb-1">赛次</div>
+                    <Select value={indRound} onChange={(e) => setIndRound(e.target.value)}>
+                      <option value="">-- 选择赛次 --</option>
+                      {indRounds.map((r) => (<option key={r.id} value={String(r.round_number)}>{r.round_name}</option>))}
+                    </Select>
+                  </div>
+                )}
                 <div><div className="text-xs font-medium text-slate-700 mb-1">运动员号</div><Input ref={indNoRef} value={indNo} onChange={(e) => setIndNo(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && indNo.trim()) { e.preventDefault(); indPerfRef.current?.focus(); } }} placeholder="输入运动员号，回车跳成绩" /></div>
                 <div><div className="text-xs font-medium text-slate-700 mb-1">成绩</div><Input ref={indPerfRef} value={indPerf} onChange={(e) => setIndPerf(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && indPerf.trim()) { e.preventDefault(); submitInd(); } }} placeholder="如 12.34，回车提交" /></div>
                 <details className="text-xs text-slate-400"><summary className="cursor-pointer">手动指定名次（可选）</summary><div className="mt-2"><Input type="number" min={1} value={indRank} onChange={(e) => setIndRank(e.target.value)} placeholder="留空则自动计算" /></div></details>
@@ -232,7 +262,15 @@ export function ResultEntryPage() {
           <CardHeader><div className="flex items-center gap-2"><Users className="h-4 w-4 text-accent" /><CardTitle>团体成绩录入</CardTitle></div></CardHeader>
           <CardContent>
             <div className="max-w-md space-y-3">
-              <div><div className="text-xs font-medium text-slate-700 mb-1">项目</div><Select value={teEvent} onChange={(e) => setTeEvent(e.target.value)}><option value="">选择团体项目</option>{events.filter((e) => e.is_individual === 0).map((e) => (<option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{label(e.group)}</option>))}</Select></div>
+              <div><div className="text-xs font-medium text-slate-700 mb-1">项目</div><Select value={teEvent} onChange={(e) => { setTeEvent(e.target.value); setTeRound(""); }}><option value="">选择团体项目</option>{events.filter((e) => e.is_individual === 0).map((e) => (<option key={e.id} value={String(e.id)}>{e.name} {glabel(e.gender)}{label(e.group)}</option>))}</Select></div>
+              {teRounds.length > 0 && (
+                <div><div className="text-xs font-medium text-slate-700 mb-1">赛次</div>
+                  <Select value={teRound} onChange={(e) => setTeRound(e.target.value)}>
+                    <option value="">-- 选择赛次 --</option>
+                    {teRounds.map((r) => (<option key={r.id} value={String(r.round_number)}>{r.round_name}</option>))}
+                  </Select>
+                </div>
+              )}
               <div><div className="text-xs font-medium text-slate-700 mb-1">队伍</div><Select value={teId} onChange={(e) => setTeId(e.target.value)}><option value="">选择队伍</option>{teams.map((t) => (<option key={t.id} value={String(t.id)}>{t.team_name} · {t.department_name}</option>))}</Select></div>
               <div><div className="text-xs font-medium text-slate-700 mb-1">成绩</div><Input value={tePerf} onChange={(e) => setTePerf(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && tePerf.trim()) { e.preventDefault(); submitTeam(); } }} placeholder="如 45.67，回车提交" /></div>
               <details className="text-xs text-slate-400"><summary className="cursor-pointer">手动指定名次（可选）</summary><div className="mt-2"><Input type="number" min={1} value={teRank} onChange={(e) => setTeRank(e.target.value)} placeholder="留空则自动计算" /></div></details>

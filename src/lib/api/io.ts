@@ -68,7 +68,25 @@ export function downloadImportTemplate(name: string) {
   return `${BASE}/imports/templates/${name}`;
 }
 
-// --- attempt notices ---
+// --- grouped & full result notices ---
+
+export function previewGroupedResultPdf(eventId: number, roundId: number, templateName: string) {
+  return `${BASE}/notices/grouped-result.pdf?event_id=${eventId}&round_id=${roundId}&template_name=${templateName}`;
+}
+
+export function exportGroupedResultXlsx(eventId: number, roundId: number, templateName: string) {
+  return `${BASE}/notices/grouped-result.xlsx?event_id=${eventId}&round_id=${roundId}&template_name=${templateName}`;
+}
+
+export function previewFullResultPdf(eventId: number, roundId: number, templateName: string) {
+  return `${BASE}/notices/full-result.pdf?event_id=${eventId}&round_id=${roundId}&template_name=${templateName}`;
+}
+
+export function exportFullResultXlsx(eventId: number, roundId: number, templateName: string) {
+  return `${BASE}/notices/full-result.xlsx?event_id=${eventId}&round_id=${roundId}&template_name=${templateName}`;
+}
+
+// --- attempt notices (legacy) ---
 
 export function previewPersonalAttemptPdf(eventId: number, templateName: string, attemptNumber: number) {
   return `${BASE}/notices/personal-attempt.pdf?event_id=${eventId}&template_name=${templateName}&attempt_number=${attemptNumber}`;

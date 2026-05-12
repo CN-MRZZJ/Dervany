@@ -68,10 +68,34 @@ export {
   clearData,
 } from "./settings";
 export {
+  type HeatEntry,
+  type HeatInfo,
+  type RoundHeats,
+  type HeatsData,
+  type UnassignedAthlete,
+  configHeatRounds,
+  generateHeats,
+  queryHeats,
+  clearHeats,
+  queryUnassignedParticipants,
+  addHeatEntry,
+  removeHeatEntry,
+  updateHeatEntry,
+  listAlgorithms,
+} from "./heats";
+export {
+  advanceRound,
+  listAdvancementStrategies,
+} from "./advancement";
+export {
   previewPersonalPdf,
   previewTeamPdf,
   exportPersonalXlsx,
   exportTeamXlsx,
+  previewGroupedResultPdf,
+  exportGroupedResultXlsx,
+  previewFullResultPdf,
+  exportFullResultXlsx,
   importAthletesCsv,
   importEventsCsv,
   importRegistrationsCsv,

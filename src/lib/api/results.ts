@@ -11,6 +11,7 @@ export type ResultRecord = {
   target_name: string;
   department_name: string;
   rank: number;
+  heat_rank?: number;
   points: number;
   performance: string;
   entered_by: string;
@@ -20,6 +21,7 @@ export type ResultRecord = {
 export function queryResults(params: {
   page?: number;
   page_size?: number;
+  event_id?: number;
   keyword?: string;
   department_name?: string;
   gender?: string;
@@ -28,6 +30,7 @@ export function queryResults(params: {
   scoring_strategy?: string;
   sort_by?: string;
   sort_dir?: string;
+  round_id?: number;
 }) {
   const q = new URLSearchParams();
   Object.entries(params).forEach(([k, v]) => { if (v !== undefined && v !== "") q.set(k, String(v)); });
@@ -36,6 +39,7 @@ export function queryResults(params: {
 
 export function submitResult(body: {
   event_id: number;
+  round_id?: number;
   athlete_id?: number;
   athlete_no?: string;
   athlete_type?: string;
@@ -60,12 +64,14 @@ export type AttemptRecord = {
 
 export function queryAttempts(params: {
   event_id: number;
+  round_id?: number;
   athlete_type?: string;
   athlete_ref_id?: number;
   team_id?: number;
 }) {
   const q = new URLSearchParams();
   q.set("event_id", String(params.event_id));
+  if (params.round_id) q.set("round_id", String(params.round_id));
   if (params.athlete_type) q.set("athlete_type", params.athlete_type);
   if (params.athlete_ref_id) q.set("athlete_ref_id", String(params.athlete_ref_id));
   if (params.team_id) q.set("team_id", String(params.team_id));

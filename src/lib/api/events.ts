@@ -9,6 +9,10 @@ export type EventInfo = {
   event_type: string;
   scoring_strategy: string;
   is_individual: number;
+  competition_format?: string;
+  heat_rounds?: number;
+  round_names?: Record<string, string>;
+  registration_count?: number;
 };
 
 export function queryEvents() {
