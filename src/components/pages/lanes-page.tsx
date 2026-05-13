@@ -82,6 +82,12 @@ export function LaneAssignmentPage() {
   const [moveTargetHeat, setMoveTargetHeat] = React.useState<number | null>(null);
   const [moveTargetLane, setMoveTargetLane] = React.useState<number | null>(null);
 
+  // Batch heats
+  const [showBatchModal, setShowBatchModal] = React.useState(false);
+  const [batchMode, setBatchMode] = React.useState<"track" | "field">("field");
+  const [batchLanes, setBatchLanes] = React.useState(8);
+  const [batchEventIds, setBatchEventIds] = React.useState<Set<number>>(new Set());
+
   // Mock state (only used when USE_MOCK=true)
   const [mockData, setMockData] = React.useState<HeatsData>({
     event_id: 1, rounds: [],
@@ -225,6 +231,29 @@ export function LaneAssignmentPage() {
     }
   };
 
+  const handleBatchHeats = async () => {
+    setOperating(true);
+    let done = 0;
+    let skipped = 0;
+    let failed = 0;
+    for (const eventId of batchEventIds) {
+      const ev = events.find((e) => e.id === eventId);
+      if (!ev?.registration_count) { skipped++; continue; }
+      try {
+        await generateHeats(eventId, {
+          algorithm: "random",
+          lanes_per_heat: batchMode === "track" ? batchLanes : ev.registration_count,
+        });
+        done++;
+      } catch { failed++; }
+    }
+    show(`${done} 个生成，${skipped} 个跳过，${failed} 个失败`, failed ? "error" : "success");
+    setShowBatchModal(false);
+    queryEvents().then((d) => setEvents(d.items)).catch(() => {});
+    if (selectedEventId) reload(selectedEventId);
+    setOperating(false);
+  };
+
   const handleAddEntry = async () => {
     if (!selectedEventId || !activeHeatId || !addAthleteId) return;
     setOperating(true);
@@ -290,7 +319,7 @@ export function LaneAssignmentPage() {
     const activeRound = rounds[activeRoundIdx];
     const activeHeat = activeRound?.heats.find((h) => h.id === activeHeatId);
     const occupied = new Set((activeHeat?.entries ?? []).filter((e) => e.lane != null).map((e) => e.lane));
-    const firstEmpty = Array.from({ length: LANE_COUNT }, (_, i) => i + 1).find((n) => !occupied.has(n));
+    const firstEmpty = Array.from({ length: activeLaneCount }, (_, i) => i + 1).find((n) => !occupied.has(n));
     setAddTargetLane(firstEmpty ?? null);
     setShowAddModal(true);
   };
@@ -304,6 +333,7 @@ export function LaneAssignmentPage() {
 
   const activeRound = rounds[activeRoundIdx];
   const activeHeat = activeRound?.heats.find((h) => h.id === activeHeatId);
+  const activeLaneCount = Math.max(LANE_COUNT, ...(activeHeat?.entries.map((e) => e.lane ?? 0) ?? []));
 
   const hasHeats = rounds.some((r) => r.heats.length > 0);
   const needsConfig = selectedEvent && !(selectedEvent.heat_rounds && selectedEvent.heat_rounds > 0);
@@ -326,6 +356,22 @@ export function LaneAssignmentPage() {
         description="配置轮次、生成编排、手动调整道次"
         right={
           <div className="flex gap-2">
+            <Button variant="secondary" size="sm" onClick={() => {
+              const list = events.filter((e) => e.event_type === "track" && e.competition_format === "heats");
+              setBatchMode("track");
+              setBatchEventIds(new Set(list.filter((e) => (e.heat_rounds ?? 0) > 0).map((e) => e.id)));
+              setShowBatchModal(true);
+            }} disabled={operating}>
+              <Zap className="h-4 w-4" />一键编排径赛
+            </Button>
+            <Button variant="secondary" size="sm" onClick={() => {
+              const list = events.filter((e) => e.event_type === "field" && e.competition_format === "heats");
+              setBatchMode("field");
+              setBatchEventIds(new Set(list.filter((e) => (e.heat_rounds ?? 0) > 0).map((e) => e.id)));
+              setShowBatchModal(true);
+            }} disabled={operating}>
+              <Zap className="h-4 w-4" />一键编排田赛
+            </Button>
             {selectedEventId && hasHeats && (
               <Button variant="warning" size="sm" onClick={handleClearHeats} disabled={operating}>
                 <Trash2 className="h-4 w-4" />清除编排
@@ -466,7 +512,7 @@ export function LaneAssignmentPage() {
                 <LaneAssignmentPanel
                   heatLabel={activeHeat.heat_name}
                   entries={activeHeat.entries}
-                  laneCount={LANE_COUNT}
+                  laneCount={activeLaneCount}
                   onAddClick={openAddModal}
                   onRemoveClick={handleRemoveEntry}
                   onMoveClick={openMoveModal}
@@ -641,7 +687,7 @@ export function LaneAssignmentPage() {
               <div className="text-xs font-medium text-slate-700 mb-1">道次（可选）</div>
               <Select value={addTargetLane ?? ""} onChange={(e) => setAddTargetLane(e.target.value ? Number(e.target.value) : null)}>
                 <option value="">-- 仅分组不指定道次 --</option>
-                {Array.from({ length: LANE_COUNT }, (_, i) => i + 1).map((n) => {
+                {Array.from({ length: activeLaneCount }, (_, i) => i + 1).map((n) => {
                   const occupied = activeHeat?.entries.some((e) => e.lane === n);
                   return (
                     <option key={n} value={n} disabled={occupied}>{n}道{occupied ? " (已占用)" : ""}</option>
@@ -688,7 +734,7 @@ export function LaneAssignmentPage() {
               <div className="text-xs font-medium text-slate-700 mb-1">目标道次（可选，留空不指定）</div>
               <Select value={moveTargetLane ?? ""} onChange={(e) => setMoveTargetLane(e.target.value ? Number(e.target.value) : null)}>
                 <option value="">-- 不指定 --</option>
-                {Array.from({ length: LANE_COUNT }, (_, i) => i + 1).map((n) => (
+                {Array.from({ length: activeLaneCount }, (_, i) => i + 1).map((n) => (
                   <option key={n} value={n}>{n}道</option>
                 ))}
               </Select>
@@ -696,6 +742,64 @@ export function LaneAssignmentPage() {
             <div className="flex gap-2 justify-end">
               <Button variant="secondary" onClick={() => setShowMoveModal(false)}>取消</Button>
               <Button onClick={handleMoveEntry} disabled={operating || !moveTargetHeat}>确认调整</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Batch Field Heats Modal */}
+      {showBatchModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30" onClick={() => setShowBatchModal(false)}>
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg mx-4 space-y-4 max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-lg font-semibold text-slate-900">一键编排{batchMode === "track" ? "径赛" : "田赛"}</h3>
+            <p className="text-sm text-slate-500">勾选需要生成编排的项目，未配置轮次的已排除</p>
+            {batchMode === "track" && (
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-medium text-slate-700">每组道数</span>
+                <Input className="w-20" type="number" min={2} max={10} value={batchLanes} onChange={(e) => setBatchLanes(Number(e.target.value) || 8)} />
+              </div>
+            )}
+            {batchMode === "field" && <p className="text-xs text-slate-400">每组道数 = 报名人数</p>}
+            <div className="space-y-1">
+              {events
+                .filter((e) => e.event_type === batchMode && e.competition_format === "heats")
+                .map((e) => {
+                  const configured = (e.heat_rounds ?? 0) > 0;
+                  const checked = batchEventIds.has(e.id);
+                  return (
+                    <label key={e.id} className={`flex items-center gap-3 rounded-lg px-3 py-2.5 border transition-colors ${!configured ? "bg-slate-50 border-slate-100 text-slate-300" : checked ? "border-accent bg-accent-bg" : "border-slate-200 hover:border-slate-300 cursor-pointer"}`}>
+                      <input
+                        type="checkbox"
+                        disabled={!configured}
+                        checked={configured && checked}
+                        onChange={(ev) => {
+                          setBatchEventIds((prev) => {
+                            const next = new Set(prev);
+                            if (ev.target.checked) next.add(e.id); else next.delete(e.id);
+                            return next;
+                          });
+                        }}
+                      />
+                      <div className="flex-1 text-sm">
+                        <span className={configured ? "text-slate-900 font-medium" : "text-slate-400"}>{e.name} {e.gender === "male" ? "男子" : "女子"} {label(e.group)}</span>
+                        <span className="text-xs text-slate-400 ml-2">
+                          {configured
+                            ? `${e.heat_rounds}轮 · 报名${e.registration_count ?? "?"}人`
+                            : "未配置轮次"}
+                        </span>
+                      </div>
+                    </label>
+                  );
+                })}
+            </div>
+            {Array.from(batchEventIds).length === 0 && (
+              <div className="text-center text-sm text-slate-400 py-2">没有可编排的项目</div>
+            )}
+            <div className="flex gap-2 justify-end">
+              <Button variant="secondary" onClick={() => setShowBatchModal(false)}>取消</Button>
+              <Button onClick={handleBatchHeats} disabled={operating || batchEventIds.size === 0}>
+                {operating ? "编排中…" : `为 ${batchEventIds.size} 个项目生成编排`}
+              </Button>
             </div>
           </div>
         </div>

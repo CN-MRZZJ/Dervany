@@ -3,6 +3,7 @@ import {
   BarChart3,
   CalendarClock,
   ClipboardEdit,
+  ClipboardList,
   Download,
   Eraser,
   Megaphone,
@@ -48,6 +49,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { href: "/progress", label: "比赛进度", Icon: CalendarClock },
       { href: "/results", label: "成绩录入", Icon: ClipboardEdit },
       { href: "/publish", label: "成绩公示", Icon: ScrollText },
+      { href: "/checkin", label: "检录表", Icon: ClipboardList },
     ],
   },
   {

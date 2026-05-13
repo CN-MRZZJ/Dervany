@@ -104,6 +104,14 @@ export function exportTeamAttemptXlsx(eventId: number, templateName: string, att
   return `${BASE}/notices/team-attempt.xlsx?event_id=${eventId}&template_name=${templateName}&attempt_number=${attemptNumber}`;
 }
 
+// --- checkin ---
+
+export function exportCheckinXlsx(eventId: number, roundId: number, heatId?: number) {
+  const q = new URLSearchParams({ event_id: String(eventId), round_id: String(roundId) });
+  if (heatId) q.set("heat_id", String(heatId));
+  return `${BASE}/worksheets/checkin.xlsx?${q.toString()}`;
+}
+
 // --- exports ---
 
 export function exportViewCsv(view: string, params?: Record<string, string>) {

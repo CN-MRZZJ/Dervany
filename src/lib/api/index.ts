@@ -96,6 +96,7 @@ export {
   exportGroupedResultXlsx,
   previewFullResultPdf,
   exportFullResultXlsx,
+  exportCheckinXlsx,
   importAthletesCsv,
   importEventsCsv,
   importRegistrationsCsv,
